@@ -1,0 +1,44 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Оплата прошла успешно — SolarMiner</title>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@700;900&family=Golos+Text:wght@400;600;700&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#0C1A2E;color:#fff;font-family:'Golos Text',sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;}
+.card{background:#111f38;border:1px solid #1e3a5f;border-radius:24px;padding:48px 40px;max-width:480px;width:100%;text-align:center;}
+.icon{font-size:72px;margin-bottom:24px;animation:pop .5s ease;}
+@keyframes pop{0%{transform:scale(0)}80%{transform:scale(1.15)}100%{transform:scale(1)}}
+.logo{font-family:'Unbounded',sans-serif;font-size:20px;font-weight:900;color:#fff;margin-bottom:32px;}
+.logo span{color:#F59E0B;}
+h1{font-family:'Unbounded',sans-serif;font-size:22px;font-weight:700;margin-bottom:12px;color:#22C55E;}
+p{color:rgba(255,255,255,0.6);font-size:15px;line-height:1.7;margin-bottom:28px;}
+.info-box{background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);border-radius:12px;padding:16px 20px;margin-bottom:28px;font-size:14px;color:rgba(255,255,255,0.7);text-align:left;}
+.info-box b{color:#22C55E;}
+.btn{display:inline-block;background:#F59E0B;color:#0C1A2E;border-radius:12px;padding:14px 32px;font-family:'Golos Text',sans-serif;font-size:15px;font-weight:700;text-decoration:none;transition:background .2s;}
+.btn:hover{background:#D97706;}
+.support{margin-top:20px;font-size:13px;color:rgba(255,255,255,0.3);}
+.support a{color:rgba(255,255,255,0.5);text-decoration:none;}
+.support a:hover{color:#F59E0B;}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="logo">Solar<span>Miner</span></div>
+  <div class="icon">✅</div>
+  <h1>Оплата прошла успешно!</h1>
+  <p>Ваш платёж получен и обрабатывается. Мы уже готовим ваш заказ.</p>
+  <div class="info-box">
+    <b>Что дальше?</b><br><br>
+    📧 На вашу почту придёт подтверждение заказа<br><br>
+    📞 Менеджер свяжется с вами в течение 24 часов<br><br>
+    📦 Производство займёт ~6 месяцев
+  </div>
+  <a href="https://sun-solar-ten.vercel.app" class="btn">← Вернуться на сайт</a>
+  <div class="support">Вопросы? <a href="mailto:support@sunsolar.pro">support@sunsolar.pro</a></div>
+</div>
+</body>
+</html>

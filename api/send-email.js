@@ -22,7 +22,7 @@ export default async function handler(req, res) {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        from: 'SolarMiner <noreply@bpserv.host>',
+        from: 'SolarMiner <onboarding@resend.dev>',
         to: ['Mmmagicmkr@gmail.com'],
         subject: `📋 Новая заявка на предзаказ от ${name}`,
         html: `
@@ -46,7 +46,7 @@ export default async function handler(req, res) {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        from: 'SolarMiner <noreply@bpserv.host>',
+        from: 'SolarMiner <onboarding@resend.dev>',
         to: [email],
         subject: '✅ Ваша заявка принята — SolarMiner',
         html: `

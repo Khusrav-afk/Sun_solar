@@ -1176,37 +1176,34 @@ async function processPayment() {
   if (!agree) { showToast('Примите условия соглашения', 'error'); return; }
 
   const btn = document.getElementById('modal-pay-btn');
-  btn.textContent = 'Обработка...';
+  btn.textContent = 'Создаём счёт...';
   btn.disabled = true;
 
   try {
-    // ── EMAIL УВЕДОМЛЕНИЕ ──
-    // Раскомментировать после получения Resend API ключа:
-    // await fetch('/api/send-email', {
-    //   method: 'POST',
-    //   headers: {'Content-Type':'application/json'},
-    //   body: JSON.stringify({ name, email, phone, device: currentDevice, total: currentPrice, type: 'order' })
-    // });
+    const res = await fetch('/api/create-payment', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        amount: currentPrice,
+        email: email,
+        name: name,
+        device: currentDevice
+      })
+    });
 
-    // ── CRYPTOCLOUD ОПЛАТА ──
-    // Раскомментировать после получения CryptoCloud ключей:
-    // const res = await fetch('/api/create-payment', {
-    //   method: 'POST',
-    //   headers: {'Content-Type':'application/json'},
-    //   body: JSON.stringify({ amount: currentPrice, currency: 'USDT', email, name, device: currentDevice })
-    // });
-    // const data = await res.json();
-    // if (data.pay_url) { window.open(data.pay_url, '_blank'); }
+    const data = await res.json();
 
-    // ВРЕМЕННО: перенаправление на sunsolar.pro
-    await new Promise(r => setTimeout(r, 900));
-    document.getElementById('modal-fields').style.display = 'none';
-    document.getElementById('modal-summary').style.display = 'none';
-    document.getElementById('modal-success').style.display = 'block';
-    showToast('Заявка принята! Проверьте email.');
-    // window.open('https://sunsolar.pro', '_blank');
+    if (data.pay_url) {
+      window.open(data.pay_url, '_blank');
+      document.getElementById('modal-fields').style.display = 'none';
+      document.getElementById('modal-summary').style.display = 'none';
+      document.getElementById('modal-success').style.display = 'block';
+      showToast('Счёт создан! Переходим к оплате...');
+    } else {
+      throw new Error(data.error || 'Ошибка создания счёта');
+    }
   } catch(e) {
-    showToast('Ошибка. Попробуйте ещё раз.', 'error');
+    showToast('Ошибка: ' + e.message, 'error');
     btn.textContent = 'Перейти к оплате →';
     btn.disabled = false;
   }
@@ -1225,23 +1222,27 @@ async function submitPreorder() {
   btn.textContent = 'Отправка...';
   btn.disabled = true;
 
-  // ── EMAIL УВЕДОМЛЕНИЕ ──
-  // Раскомментировать после получения Resend API ключа:
-  // await fetch('/api/send-email', {
-  //   method: 'POST',
-  //   headers: {'Content-Type':'application/json'},
-  //   body: JSON.stringify({
-  //     name, email,
-  //     phone: document.getElementById('pr-phone').value,
-  //     device: document.getElementById('pr-device').value,
-  //     type: 'preorder'
-  //   })
-  // });
+  try {
+    await fetch('/api/send-email', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        name,
+        email,
+        phone: document.getElementById('pr-phone').value,
+        device: document.getElementById('pr-device').value,
+        type: 'preorder'
+      })
+    });
 
-  await new Promise(r => setTimeout(r, 1000));
-  document.getElementById('pr-fields').style.display = 'none';
-  document.getElementById('pr-success').style.display = 'block';
-  showToast('Заявка отправлена! Проверьте email.');
+    document.getElementById('pr-fields').style.display = 'none';
+    document.getElementById('pr-success').style.display = 'block';
+    showToast('Заявка отправлена! Проверьте email.');
+  } catch(e) {
+    showToast('Ошибка отправки. Попробуйте ещё раз.', 'error');
+    btn.textContent = 'Отправить заявку →';
+    btn.disabled = false;
+  }
 }
 
 // ── TOAST ──

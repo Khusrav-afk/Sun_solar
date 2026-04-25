@@ -19,9 +19,8 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         shop_id: process.env.CRYPTOCLOUD_SHOP_ID,
         amount: amount,
-        currency: 'USD',
-        email: email,
         order_id: `order_${Date.now()}`,
+        email: email,
         add_fields: {
           customer_name: name,
           device: device

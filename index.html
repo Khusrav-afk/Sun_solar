@@ -20,7 +20,7 @@ body{background:var(--bg);color:var(--navy);font-family:"Golos Text",sans-serif;
 /* ANNOUNCE BAR */
 .announce{background:var(--navy);color:#fff;text-align:center;padding:.55rem 1rem;font-size:.75rem;letter-spacing:.03em;position:relative;}
 .announce strong{color:var(--sun);}
-.online-pill{position:absolute;right:1.5rem;top:50%;transform:translateY(-50%);background:var(--sky);color:#fff;padding:.28rem .9rem;border-radius:100px;font-size:.68rem;font-weight:600;text-decoration:none;white-space:nowrap;transition:background .2s;}
+.online-pill{background:var(--sky);color:#fff;padding:.28rem .9rem;border-radius:100px;font-size:.68rem;font-weight:600;text-decoration:none;white-space:nowrap;transition:background .2s;display:inline-flex;align-items:center;}
 .online-pill:hover{background:#0284C7;}
 
 /* NAV */
@@ -238,10 +238,12 @@ footer a{color:rgba(255,255,255,0.4);text-decoration:none;}
 <body>
 
 <!-- ANNOUNCE BAR -->
-<div class="announce">
-  <strong>ПРЕДЗАКАЗ ОТКРЫТ</strong> &nbsp;·&nbsp; Доставка по РФ и СНГ &nbsp;·&nbsp; Производство под заказ &nbsp;·&nbsp; Оплата в 3 этапа от <strong>$350</strong>
-  <a href="https://find-and-update.company-information.service.gov.uk/company/13176100" target="_blank" class="online-pill" style="background:rgba(34,197,94,0.8);margin-right:4.5rem;">✓ Verified UK Ltd →</a>
-  <a href="#online" class="online-pill">💰 Заработать онлайн →</a>
+<div class="announce" style="display:flex;align-items:center;justify-content:center;gap:.75rem;flex-wrap:wrap;">
+  <span><strong>ПРЕДЗАКАЗ ОТКРЫТ</strong> &nbsp;·&nbsp; Доставка по РФ и СНГ &nbsp;·&nbsp; Производство под заказ &nbsp;·&nbsp; Оплата в 3 этапа от <strong>$350</strong></span>
+  <div style="display:flex;gap:.5rem;align-items:center;flex-shrink:0;">
+    <a href="https://find-and-update.company-information.service.gov.uk/company/13176100" target="_blank" class="online-pill" style="background:rgba(34,197,94,0.8);">✓ Verified UK Ltd →</a>
+    <a href="#online" class="online-pill">💰 Заработать онлайн →</a>
+  </div>
 </div>
 
 <!-- NAV -->
@@ -887,7 +889,7 @@ footer a{color:rgba(255,255,255,0.4);text-decoration:none;}
     </div>
 
     <!-- PREORDER FORM -->
-    <div id="preorder-form-wrap" style="margin-top:2.5rem;background:var(--white);border:1.5px solid var(--border);border-radius:20px;padding:2rem;max-width:560px;">
+    <div id="preorder-form-wrap" style="margin-top:2.5rem;background:var(--white);border:1.5px solid var(--border);border-radius:20px;padding:2rem;max-width:560px;margin-left:auto;margin-right:auto;">
       <div style="font-family:'Unbounded',sans-serif;font-weight:700;font-size:1rem;margin-bottom:.35rem;">Оставить заявку на предзаказ</div>
       <div style="font-size:.78rem;color:var(--muted);margin-bottom:1.5rem;">Заполните форму — мы свяжемся в течение 24 часов и зафиксируем вашу цену</div>
       <div id="pr-fields">
@@ -1050,10 +1052,17 @@ footer a{color:rgba(255,255,255,0.4);text-decoration:none;}
 </div>
 
 <footer>
+  <!-- Documents block -->
+  <div style="max-width:900px;margin:0 auto 1.5rem;display:flex;flex-wrap:wrap;gap:.65rem;justify-content:center;">
+    <a href="docs/green-sun-solar-inc.pdf" target="_blank" style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:.4rem .85rem;color:rgba(255,255,255,0.6);text-decoration:none;font-size:.7rem;font-weight:600;transition:all .2s;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='rgba(255,255,255,0.06)'">📄 Green Sun Solar Inc</a>
+    <a href="docs/agreement.docx" target="_blank" style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:.4rem .85rem;color:rgba(255,255,255,0.6);text-decoration:none;font-size:.7rem;font-weight:600;transition:all .2s;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='rgba(255,255,255,0.06)'">📄 Пользовательское соглашение</a>
+    <a href="docs/policy.docx" target="_blank" style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:.4rem .85rem;color:rgba(255,255,255,0.6);text-decoration:none;font-size:.7rem;font-weight:600;transition:all .2s;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='rgba(255,255,255,0.06)'">📄 Политика конфиденциальности</a>
+    <a href="docs/contract.docx" target="_blank" style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:.4rem .85rem;color:rgba(255,255,255,0.6);text-decoration:none;font-size:.7rem;font-weight:600;transition:all .2s;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='rgba(255,255,255,0.06)'">📄 Договор аренды вычислительной мощности</a>
+  </div>
   © 2025 SolarMiner<br>
   Официальное юридическое лицо: <strong style="color:rgba(255,255,255,0.5);">Green Sun Solar Ltd</strong> · Reg. No. <a href="https://find-and-update.company-information.service.gov.uk/company/13176100" target="_blank" style="color:rgba(255,255,255,0.4);">13176100</a> · Registered in England & Wales<br>
   Договор аренды вычислительной мощности · Физическое оборудование поставляется по договору купли-продажи<br>
-  <a href="docs/policy.docx" target="_blank">Политика конфиденциальности</a> · <a href="docs/agreement.docx" target="_blank">Пользовательское соглашение</a> · <a href="docs/contract.docx" target="_blank">Договор аренды</a> · <a href="docs/green-sun-solar-inc.pdf" target="_blank">Green Sun Solar Inc</a> · <a href="mailto:support@sunsolar.pro">Контакты</a>
+  <a href="mailto:support@sunsolar.pro">support@sunsolar.pro</a>
 </footer>
 
 <!-- ORDER MODAL -->
@@ -1085,14 +1094,14 @@ footer a{color:rgba(255,255,255,0.4);text-decoration:none;}
         <input id="m-phone" type="tel" placeholder="+7 (___) ___-__-__" style="width:100%;border:1.5px solid #e2e8f0;border-radius:9px;padding:.6rem .85rem;font-family:'Golos Text',sans-serif;font-size:.85rem;outline:none;" onfocus="this.style.borderColor='#F59E0B'" onblur="this.style.borderColor='#e2e8f0'"/>
       </div>
       <div style="font-size:.7rem;font-weight:700;color:#64748B;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.6rem;">Способ оплаты</div>
-      <div style="display:flex;gap:.5rem;margin-bottom:1rem;">
-        <div id="pm-crypto" onclick="selectPay('crypto')" style="flex:1;border:1.5px solid #F59E0B;border-radius:10px;padding:.65rem;text-align:center;cursor:pointer;background:rgba(245,158,11,0.05);">
-          <div style="font-size:1.1rem;margin-bottom:2px;">💎</div>
-          <div style="font-size:.68rem;font-weight:700;">USDT</div>
-        </div>
-        <div id="pm-card" onclick="selectPay('card')" style="flex:1;border:1.5px solid #e2e8f0;border-radius:10px;padding:.65rem;text-align:center;cursor:pointer;">
-          <div style="font-size:1.1rem;margin-bottom:2px;">💳</div>
-          <div style="font-size:.68rem;font-weight:700;">Карта / СБП</div>
+      <div style="margin-bottom:1rem;">
+        <div style="border:1.5px solid #F59E0B;border-radius:10px;padding:.75rem 1rem;background:rgba(245,158,11,0.05);display:flex;align-items:center;gap:10px;">
+          <div style="font-size:1.2rem;">💎</div>
+          <div>
+            <div style="font-size:.78rem;font-weight:700;">USDT (TRC-20 / ERC-20)</div>
+            <div style="font-size:.65rem;color:#64748B;">Оплата в криптовалюте через CryptoCloud</div>
+          </div>
+          <div style="margin-left:auto;width:16px;height:16px;border-radius:50%;background:#F59E0B;display:flex;align-items:center;justify-content:center;font-size:.55rem;color:#fff;font-weight:900;">✓</div>
         </div>
       </div>
       <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:1.1rem;font-size:.7rem;color:#64748B;">
@@ -1155,13 +1164,7 @@ function closeModal() {
   document.body.style.overflow = '';
 }
 
-function selectPay(method) {
-  currentPayMethod = method;
-  const active = 'border:1.5px solid #F59E0B;border-radius:10px;padding:.65rem;text-align:center;cursor:pointer;background:rgba(245,158,11,0.05);';
-  const inactive = 'border:1.5px solid #e2e8f0;border-radius:10px;padding:.65rem;text-align:center;cursor:pointer;';
-  document.getElementById('pm-crypto').style.cssText = method==='crypto' ? active : inactive;
-  document.getElementById('pm-card').style.cssText = method==='card' ? active : inactive;
-}
+function selectPay(method) { currentPayMethod = method; }
 
 async function processPayment() {
   const name = document.getElementById('m-name').value.trim();

@@ -39,7 +39,7 @@ export default async function handler(req, res) {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          from: 'SolarMiner <noreply@bpserv.host>',
+          from: 'SolarMiner <onboarding@resend.dev>',
           to: ['Mmmagicmkr@gmail.com'],
           subject: `✅ Оплата подтверждена! Заказ ${orderId}`,
           html: `

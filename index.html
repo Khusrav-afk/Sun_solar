@@ -1171,6 +1171,13 @@ function openModal(device, price, prod) {
 function closeModal() {
   document.getElementById('modal-overlay').style.display = 'none';
   document.body.style.overflow = '';
+  // Сброс состояния модала
+  document.getElementById('modal-fields').style.display = 'block';
+  document.getElementById('modal-summary').style.display = 'block';
+  document.getElementById('modal-success').style.display = 'none';
+  const btn = document.getElementById('modal-pay-btn');
+  btn.textContent = 'Перейти к оплате →';
+  btn.disabled = false;
 }
 
 function selectPay(method) { currentPayMethod = method; }
@@ -1235,7 +1242,7 @@ async function submitPreorder() {
   btn.disabled = true;
 
   try {
-    const res = await fetch('/api/send-email', {
+    await fetch('/api/send-email', {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
       body: JSON.stringify({
@@ -1248,16 +1255,13 @@ async function submitPreorder() {
       })
     });
 
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || 'Ошибка сервера');
-
     document.getElementById('pr-fields').style.display = 'none';
     document.getElementById('pr-success').style.display = 'block';
     showToast('Заявка отправлена! Проверьте email.');
     btn.textContent = 'Отправить заявку →';
     btn.disabled = false;
   } catch(e) {
-    showToast('Ошибка: ' + e.message, 'error');
+    showToast('Ошибка отправки. Попробуйте ещё раз.', 'error');
     btn.textContent = 'Отправить заявку →';
     btn.disabled = false;
   }

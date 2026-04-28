@@ -31,7 +31,7 @@ export default async function handler(req, res) {
     const data = await response.json();
 
     if (data.status === 'success' && data.result?.link) {
-      // Отправить уведомление на почту заказчика
+      // Отправить уведомление на почту менеджера
       await notifyManager({ name, email, device, amount });
       return res.status(200).json({ pay_url: data.result.link });
     } else {
@@ -56,8 +56,8 @@ async function notifyManager({ name, email, device, amount }) {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      from: 'SolarMiner <noreply@bpserv.host>',
-      to: ['Mmmagicmkr@gmail.com'],
+      from: 'SolarMiner <noreply@sunsolarminer.com>',
+      to: ['bhusrav59@gmail.com'],
       subject: `💰 Новый заказ от ${name} — $${amount}`,
       html: `
         <h2>Новый заказ на SolarMiner!</h2>

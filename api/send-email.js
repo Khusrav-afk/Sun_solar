@@ -12,8 +12,8 @@ export default async function handler(req, res) {
   try {
     // 1. Уведомление тебе (на твою почту)
     await resend.emails.send({
-      from: 'SolarMiner <noreply@sunsolar.pro>',
-      to: 'support@sunsolar.pro',
+      from: 'SolarMiner <noreply@sunsolarminer.com>',
+      to: 'bhusrav59@gmail.com',
       subject: `📋 Новая заявка — ${type === 'preorder' ? 'Предзаказ' : 'Заявка'} — ${name}`,
       html: `
         <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;">
@@ -32,7 +32,7 @@ export default async function handler(req, res) {
 
     // 2. Подтверждение клиенту
     await resend.emails.send({
-      from: 'SolarMiner <noreply@sunsolar.pro>',
+      from: 'SolarMiner <noreply@sunsolarminer.com>',
       to: email,
       subject: '✅ Ваша заявка принята — SolarMiner',
       html: `
@@ -41,7 +41,7 @@ export default async function handler(req, res) {
           <p style="color:#334155;line-height:1.6;">Ваша заявка на <strong>${device || 'SolarMiner'}</strong> успешно принята.</p>
           <p style="color:#334155;line-height:1.6;">Мы свяжемся с вами в ближайшее время для подтверждения деталей.</p>
           <hr style="border:none;border-top:1px solid #E2E8F0;margin:24px 0;">
-          <p style="color:#64748B;font-size:13px;">По вопросам: <a href="mailto:support@sunsolar.pro" style="color:#0EA5E9;">support@sunsolar.pro</a></p>
+          <p style="color:#64748B;font-size:13px;">По вопросам: <a href="mailto:support@sunsolarminer.com" style="color:#0EA5E9;">support@sunsolarminer.com</a></p>
           <p style="color:#94A3B8;font-size:12px;">© 2026 SolarMiner · Green Sun Solar Ltd</p>
         </div>
       `

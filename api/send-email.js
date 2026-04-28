@@ -13,7 +13,7 @@ export default async function handler(req, res) {
     // 1. Уведомление тебе (на твою почту)
     await resend.emails.send({
       from: 'SolarMiner <noreply@sunsolarminer.com>',
-      to: 'bhusrav59@gmail.com',
+      to: 'Mmmagicmkr@gmail.com',
       subject: `📋 Новая заявка — ${type === 'preorder' ? 'Предзаказ' : 'Заявка'} — ${name}`,
       html: `
         <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;">

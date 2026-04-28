@@ -15,7 +15,6 @@ export default async function handler(req, res) {
         .createHmac('sha256', secret)
         .update(data.invoice_id)
         .digest('hex');
-
       if (data.token !== expectedToken) {
         console.error('Invalid webhook signature');
         return res.status(403).json({ error: 'Invalid signature' });
@@ -39,7 +38,7 @@ export default async function handler(req, res) {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          from: 'SolarMiner <onboarding@resend.dev>',
+          from: 'SolarMiner <noreply@sunsolarminer.com>',
           to: ['Mmmagicmkr@gmail.com'],
           subject: `✅ Оплата подтверждена! Заказ ${orderId}`,
           html: `
@@ -56,7 +55,6 @@ export default async function handler(req, res) {
     }
 
     return res.status(200).json({ ok: true });
-
   } catch (err) {
     console.error('Callback error:', err);
     return res.status(500).json({ error: 'Server error' });

@@ -1,0 +1,1273 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SolarMiner — Майнинг на солнечных панелях нового поколения</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>☀️</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;900&family=Golos+Text:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --sun:#F59E0B;--sky:#0EA5E9;--green:#22C55E;
+  --navy:#0C1A2E;--navy2:#0F2240;
+  --muted:#64748B;--border:#E2E8F0;
+  --bg:#F8FAFC;--white:#fff;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--navy);font-family:"Golos Text",sans-serif;font-size:15px;line-height:1.6;}
+.ub{font-family:"Unbounded",sans-serif;}
+
+/* ANNOUNCE BAR */
+.announce{background:var(--navy);color:#fff;text-align:center;padding:.55rem 1rem;font-size:.75rem;letter-spacing:.03em;position:relative;}
+.announce strong{color:var(--sun);}
+.online-pill{background:var(--sky);color:#fff;padding:.28rem .9rem;border-radius:100px;font-size:.68rem;font-weight:600;text-decoration:none;white-space:nowrap;transition:background .2s;display:inline-flex;align-items:center;}
+.online-pill:hover{background:#0284C7;}
+
+/* NAV */
+nav{background:var(--white);border-bottom:1px solid var(--border);padding:.9rem 2rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 1px 12px rgba(0,0,0,0.06);}
+.logo{font-family:"Unbounded",sans-serif;font-weight:900;font-size:1.05rem;color:var(--navy);}
+.logo span{color:var(--sun);}
+.nav-links{display:flex;gap:1.75rem;font-size:.82rem;color:var(--muted);}
+.nav-links a{text-decoration:none;color:inherit;transition:color .2s;}
+.nav-links a:hover{color:var(--navy);}
+.nav-right{display:flex;gap:.75rem;align-items:center;}
+.nav-btn{background:var(--navy);color:#fff;border:none;padding:.55rem 1.3rem;border-radius:8px;font-family:"Golos Text",sans-serif;font-size:.8rem;font-weight:600;cursor:pointer;transition:background .2s;}
+.nav-btn:hover{background:#1a3050;}
+.nav-btn-sun{background:var(--sun);color:var(--navy);}
+.nav-btn-sun:hover{background:#D97706;}
+
+/* HERO */
+.hero{background:var(--navy);position:relative;overflow:hidden;padding:5rem 2rem 4rem;}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(14,165,233,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(14,165,233,0.04) 1px,transparent 1px);background-size:48px 48px;}
+.hero-glow{position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(245,158,11,0.15) 0%,transparent 65%);top:-200px;right:-100px;pointer-events:none;}
+.hero-glow2{position:absolute;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(14,165,233,0.1) 0%,transparent 65%);bottom:-150px;left:-100px;pointer-events:none;}
+.hero-inner{position:relative;z-index:2;max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;}
+.hero-eyebrow{font-size:.62rem;letter-spacing:.25em;text-transform:uppercase;color:var(--sky);margin-bottom:1rem;display:flex;align-items:center;gap:8px;}
+.hero-eyebrow::before{content:"";width:20px;height:1px;background:var(--sky);}
+.hero-h1{font-family:"Unbounded",sans-serif;font-weight:900;font-size:clamp(1.8rem,4vw,3rem);line-height:1.05;letter-spacing:-1px;color:#fff;margin-bottom:.85rem;}
+.hero-h1 .c-sun{color:var(--sun);}
+.hero-h1 .c-sky{color:var(--sky);}
+.hero-sub{font-size:.9rem;color:rgba(255,255,255,0.45);line-height:1.75;margin-bottom:2rem;max-width:480px;}
+.hero-stats{display:flex;gap:1.75rem;margin-bottom:2.25rem;}
+.hs-item .v{font-family:"Unbounded",sans-serif;font-size:1.2rem;font-weight:700;color:var(--sun);}
+.hs-item .l{font-size:.62rem;color:rgba(255,255,255,0.28);text-transform:uppercase;letter-spacing:.07em;margin-top:1px;}
+.hero-btns{display:flex;gap:.75rem;flex-wrap:wrap;}
+.btn-sun{background:var(--sun);color:var(--navy);border:none;padding:.9rem 2rem;border-radius:10px;font-family:"Golos Text",sans-serif;font-size:.9rem;font-weight:700;cursor:pointer;transition:all .2s;}
+.btn-sun:hover{background:#D97706;transform:translateY(-1px);}
+.btn-outline-w{background:transparent;color:#fff;border:1px solid rgba(255,255,255,0.2);padding:.9rem 2rem;border-radius:10px;font-family:"Golos Text",sans-serif;font-size:.9rem;cursor:pointer;transition:all .2s;}
+.btn-outline-w:hover{border-color:rgba(255,255,255,0.5);}
+.hero-img-wrap{position:relative;}
+.hero-img{width:100%;max-width:520px;border-radius:20px;box-shadow:0 30px 80px rgba(0,0,0,0.5);}
+.hero-badge{position:absolute;bottom:1.5rem;left:1.5rem;background:rgba(12,26,46,0.85);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:.75rem 1rem;display:flex;gap:10px;align-items:center;}
+.hb-dot{width:8px;height:8px;background:var(--green);border-radius:50%;animation:pulse 2s infinite;flex-shrink:0;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.hb-t{font-size:.72rem;font-weight:600;color:#fff;}
+.hb-s{font-size:.62rem;color:rgba(255,255,255,.4);}
+
+/* TRUST BAR */
+.trust-bar{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:var(--border);border-bottom:1px solid var(--border);}
+.tb-item{background:var(--white);padding:1.25rem 1rem;text-align:center;}
+.tb-icon{font-size:1.3rem;margin-bottom:.35rem;}
+.tb-t{font-size:.72rem;font-weight:600;color:var(--navy);}
+.tb-s{font-size:.62rem;color:var(--muted);margin-top:1px;}
+
+/* SECTION */
+section{padding:5rem 2rem;}
+.sec-wrap{max-width:1100px;margin:0 auto;}
+.sec-eyebrow{font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:var(--sky);margin-bottom:.6rem;display:flex;align-items:center;gap:8px;}
+.sec-eyebrow::before{content:"";width:16px;height:1.5px;background:var(--sky);}
+.sec-title{font-family:"Unbounded",sans-serif;font-weight:700;font-size:clamp(1.3rem,2.5vw,1.85rem);line-height:1.2;margin-bottom:.5rem;}
+.sec-sub{font-size:.875rem;color:var(--muted);max-width:500px;line-height:1.7;}
+
+/* PRODUCT CARDS */
+.products-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.5rem;margin-top:3rem;}
+.prod-card{background:var(--white);border:1.5px solid var(--border);border-radius:20px;overflow:hidden;transition:box-shadow .25s,border-color .25s;position:relative;display:flex;flex-direction:column;}
+.prod-card:hover{box-shadow:0 12px 48px rgba(0,0,0,0.1);border-color:#CBD5E1;}
+.prod-card.hero-card{border-color:var(--sun);box-shadow:0 0 0 1px var(--sun);}
+.prod-card.hero-card:hover{box-shadow:0 12px 48px rgba(245,158,11,0.18);}
+.card-ribbon{background:var(--sun);color:var(--navy);font-family:"Unbounded",sans-serif;font-size:.5rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.35rem 1rem;text-align:center;}
+.card-img-wrap{background:#fff;padding:1.5rem 1.5rem 1rem;position:relative;border-bottom:1px solid var(--border);}
+.card-img{width:100%;height:220px;object-fit:contain;display:block;}
+.card-img-badge{position:absolute;top:1rem;right:1rem;background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.3);color:var(--green);font-size:.62rem;font-weight:600;padding:.3rem .75rem;border-radius:100px;}
+.card-body{padding:1.5rem;display:flex;flex-direction:column;flex:1;}
+.card-tag{font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--sky);margin-bottom:.4rem;}
+.card-name{font-family:"Unbounded",sans-serif;font-weight:900;font-size:1.15rem;color:var(--navy);margin-bottom:.35rem;}
+.card-desc{font-size:.78rem;color:var(--muted);line-height:1.55;margin-bottom:1.25rem;}
+.card-roi{display:flex;align-items:center;gap:8px;background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.15);border-radius:10px;padding:.65rem .9rem;margin-bottom:1rem;}
+.roi-icon{font-size:1rem;}
+.roi-t{font-family:"Unbounded",sans-serif;font-size:.78rem;font-weight:700;color:var(--green);}
+.roi-s{font-size:.65rem;color:var(--muted);margin-top:1px;}
+.streams{display:flex;flex-direction:column;gap:6px;margin-bottom:1.25rem;}
+.stream-row{display:flex;justify-content:space-between;align-items:center;font-size:.75rem;}
+.sr-l{color:var(--muted);}
+.sr-v{font-weight:700;}
+.sv-g{color:var(--green);}
+.sv-s{color:var(--sky);}
+.sv-sun{color:var(--sun);}
+.card-divider{height:1px;background:var(--border);margin:.85rem 0;}
+.card-price-row{display:flex;align-items:baseline;gap:.5rem;margin-bottom:1rem;}
+.card-price{font-family:"Unbounded",sans-serif;font-weight:900;font-size:1.6rem;color:var(--navy);}
+.card-price-note{font-size:.7rem;color:var(--muted);}
+.pkg-label{font-size:.68rem;font-weight:600;color:var(--muted);margin-bottom:.5rem;}
+.pkg-btns{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1rem;}
+.pkg-btn{border:1.5px solid var(--border);background:var(--white);padding:.4rem .8rem;border-radius:8px;font-family:"Golos Text",sans-serif;font-size:.72rem;font-weight:600;cursor:pointer;transition:all .15s;color:var(--navy);}
+.pkg-btn:hover,.pkg-btn.active{border-color:var(--sun);background:rgba(245,158,11,0.06);color:var(--navy);}
+.pkg-discount{background:var(--sun);color:var(--navy);font-size:.58rem;font-weight:700;padding:1px 5px;border-radius:4px;margin-left:2px;}
+.card-cta{width:100%;padding:.9rem;border:none;border-radius:10px;font-family:"Golos Text",sans-serif;font-size:.88rem;font-weight:700;cursor:pointer;transition:all .2s;margin-top:auto;}
+.cta-sun{background:var(--sun);color:var(--navy);}
+.cta-sun:hover{background:#D97706;transform:translateY(-1px);}
+.cta-navy{background:var(--navy);color:#fff;}
+.cta-navy:hover{background:#1a3050;transform:translateY(-1px);}
+
+/* ONLINE CARD in grid */
+.prod-card.online-card{border-color:var(--sky);background:linear-gradient(160deg,#EFF8FF 0%,var(--white) 60%);}
+.prod-card.online-card:hover{box-shadow:0 12px 48px rgba(14,165,233,0.12);}
+
+/* PRODUCT DETAIL SECTIONS */
+.detail-section{border-top:1px solid var(--border);}
+.detail-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;}
+.detail-inner.rev{direction:rtl;}
+.detail-inner.rev > *{direction:ltr;}
+.detail-img-wrap{border-radius:20px;overflow:hidden;background:#f1f5f9;padding:2rem;}
+.detail-img{width:100%;border-radius:12px;display:block;}
+.detail-content{}
+.detail-eyebrow{font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--sky);margin-bottom:.75rem;display:flex;align-items:center;gap:8px;}
+.detail-eyebrow::before{content:"";width:14px;height:1.5px;background:var(--sky);}
+.detail-title{font-family:"Unbounded",sans-serif;font-weight:900;font-size:clamp(1.3rem,3vw,2rem);line-height:1.1;color:var(--navy);margin-bottom:.75rem;}
+.detail-title .c-sun{color:var(--sun);}
+.detail-title .c-sky{color:var(--sky);}
+.detail-body{font-size:.875rem;color:var(--muted);line-height:1.75;margin-bottom:1.5rem;}
+.detail-metrics{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1.5rem;}
+.dm-box{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:.9rem;}
+.dm-val{font-family:"Unbounded",sans-serif;font-size:1.1rem;font-weight:700;}
+.dm-lbl{font-size:.62rem;color:var(--muted);margin-top:2px;}
+.feature-list{display:flex;flex-direction:column;gap:7px;margin-bottom:1.5rem;}
+.feat{display:flex;align-items:center;gap:9px;font-size:.82rem;}
+.feat-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.dot-sun{background:var(--sun);}
+.dot-sky{background:var(--sky);}
+.dot-green{background:var(--green);}
+
+/* COMPARISON TABLE */
+.compare-wrap{overflow-x:auto;}
+.compare-table{width:100%;border-collapse:collapse;border:1px solid var(--border);border-radius:14px;overflow:hidden;min-width:600px;}
+.compare-table th{background:var(--navy);color:#fff;font-family:"Unbounded",sans-serif;font-size:.52rem;letter-spacing:.1em;text-transform:uppercase;padding:1rem 1.25rem;text-align:left;}
+.compare-table th.center{text-align:center;}
+.compare-table td{padding:.9rem 1.25rem;border-bottom:1px solid var(--border);font-size:.8rem;}
+.compare-table tr:last-child td{border-bottom:none;}
+.compare-table tr:hover td{background:rgba(14,165,233,0.02);}
+.compare-table .row-head td{background:#F1F5F9;font-size:.6rem;font-weight:700;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;padding:.6rem 1.25rem;}
+td.center{text-align:center;}
+.chk{color:var(--green);font-size:1rem;}
+.cross{color:#CBD5E1;font-size:1rem;}
+.highlight-col{background:rgba(245,158,11,0.04)!important;}
+.col-badge{display:inline-block;background:var(--sun);color:var(--navy);font-family:"Unbounded",sans-serif;font-size:.42rem;font-weight:700;padding:2px 7px;border-radius:100px;margin-left:5px;letter-spacing:.04em;vertical-align:middle;}
+
+/* KBR BLOCK */
+.kbr-block{background:var(--navy);border-radius:20px;padding:3rem;margin-top:3rem;position:relative;overflow:hidden;}
+.kbr-block::before{content:"";position:absolute;right:-80px;top:-80px;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(245,158,11,0.12) 0%,transparent 65%);pointer-events:none;}
+.kbr-eyebrow{font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(14,165,233,0.5);margin-bottom:.7rem;}
+.kbr-title{font-family:"Unbounded",sans-serif;font-weight:900;font-size:clamp(1.2rem,3vw,1.8rem);color:#fff;line-height:1.2;margin-bottom:.75rem;}
+.kbr-title .c-sun{color:var(--sun);}
+.kbr-body{font-size:.875rem;color:rgba(255,255,255,0.5);max-width:580px;line-height:1.75;margin-bottom:1.75rem;}
+.kbr-stats{display:flex;gap:2rem;flex-wrap:wrap;}
+.kbr-stat .v{font-family:"Unbounded",sans-serif;font-size:1.4rem;font-weight:700;color:var(--sun);}
+.kbr-stat .l{font-size:.6rem;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:.07em;margin-top:2px;}
+
+/* PREORDER TIMELINE */
+.timeline{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-top:2.5rem;}
+.tl-phase{background:var(--white);padding:1.5rem;}
+.tl-step{font-family:"Unbounded",sans-serif;font-size:.48rem;letter-spacing:.12em;text-transform:uppercase;color:var(--sky);margin-bottom:.5rem;}
+.tl-pct{font-family:"Unbounded",sans-serif;font-size:1.6rem;font-weight:900;color:var(--sun);line-height:1;}
+.tl-title{font-size:.82rem;font-weight:600;margin:.4rem 0 .25rem;}
+.tl-desc{font-size:.72rem;color:var(--muted);line-height:1.5;}
+.tl-bonus{margin-top:.75rem;background:rgba(34,197,94,0.07);border:1px solid rgba(34,197,94,0.15);border-radius:8px;padding:.5rem .75rem;font-size:.65rem;color:var(--green);}
+.tl-bonus strong{font-weight:700;}
+
+/* PACKAGES / BUNDLES */
+.bundles-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-top:2rem;}
+.bundle-card{background:var(--white);border:1.5px solid var(--border);border-radius:16px;padding:1.5rem;text-align:center;transition:all .2s;cursor:pointer;position:relative;}
+.bundle-card:hover{border-color:var(--sun);transform:translateY(-2px);box-shadow:0 8px 24px rgba(245,158,11,0.1);}
+.bundle-card.popular{border-color:var(--sun);background:rgba(245,158,11,0.03);}
+.bundle-popular-badge{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--sun);color:var(--navy);font-family:"Unbounded",sans-serif;font-size:.48rem;font-weight:700;padding:3px 12px;border-radius:100px;white-space:nowrap;}
+.bundle-qty{font-family:"Unbounded",sans-serif;font-size:2rem;font-weight:900;color:var(--navy);}
+.bundle-unit{font-size:.7rem;color:var(--muted);margin-bottom:.75rem;}
+.bundle-price{font-family:"Unbounded",sans-serif;font-size:1.1rem;font-weight:700;color:var(--navy);margin-bottom:.25rem;}
+.bundle-save{font-size:.65rem;color:var(--green);font-weight:600;}
+.bundle-cta{display:block;margin-top:1rem;background:var(--navy);color:#fff;border:none;width:100%;padding:.65rem;border-radius:8px;font-family:"Golos Text",sans-serif;font-size:.75rem;font-weight:600;cursor:pointer;transition:background .2s;}
+.bundle-cta:hover{background:#1a3050;}
+.bundle-cta.sun{background:var(--sun);color:var(--navy);}
+.bundle-cta.sun:hover{background:#D97706;}
+
+/* ONLINE SECTION */
+.online-section{background:linear-gradient(135deg,var(--navy) 0%,#0F2240 100%);border-radius:20px;padding:3rem;margin-top:3rem;position:relative;overflow:hidden;}
+.online-section::before{content:"";position:absolute;right:-60px;top:-60px;width:350px;height:350px;border-radius:50%;background:radial-gradient(circle,rgba(14,165,233,0.12) 0%,transparent 65%);pointer-events:none;}
+.os-eyebrow{font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(14,165,233,0.55);margin-bottom:.6rem;}
+.os-title{font-family:"Unbounded",sans-serif;font-weight:900;font-size:clamp(1.1rem,2.5vw,1.6rem);color:#fff;margin-bottom:.6rem;}
+.os-title span{color:var(--sky);}
+.os-desc{font-size:.85rem;color:rgba(255,255,255,0.45);max-width:560px;line-height:1.75;margin-bottom:1.75rem;}
+.os-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:.75rem;margin-bottom:1.75rem;}
+.os-box{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:1rem;text-align:center;}
+.os-val{font-family:"Unbounded",sans-serif;font-size:1.1rem;font-weight:700;color:var(--sky);}
+.os-lbl{font-size:.62rem;color:rgba(255,255,255,0.3);margin-top:2px;}
+.os-btn{background:var(--sky);color:#fff;border:none;padding:.85rem 2rem;border-radius:10px;font-family:"Golos Text",sans-serif;font-size:.875rem;font-weight:700;cursor:pointer;transition:all .2s;}
+.os-btn:hover{background:#0284C7;transform:translateY(-1px);}
+
+/* CTA FINAL */
+.cta-final{text-align:center;padding:5rem 2rem;background:var(--white);border-top:1px solid var(--border);}
+.cta-final h2{font-family:"Unbounded",sans-serif;font-weight:900;font-size:clamp(1.4rem,4vw,2.5rem);line-height:1.1;color:var(--navy);margin-bottom:.75rem;}
+.cta-final h2 span{color:var(--sun);}
+.cta-final p{color:var(--muted);margin-bottom:2rem;font-size:.9rem;}
+
+footer{background:var(--navy);color:rgba(255,255,255,0.3);padding:2rem;text-align:center;font-size:.72rem;line-height:1.8;}
+footer a{color:rgba(255,255,255,0.4);text-decoration:none;}
+
+@media(max-width:768px){
+  .announce{font-size:.65rem;padding:.5rem 4rem .5rem .75rem;}
+  .online-pill{font-size:.6rem;padding:.25rem .65rem;}
+  nav{padding:.8rem 1rem;}
+  .nav-links{display:none;}
+  .hero-inner{grid-template-columns:1fr;}
+  .hero-img-wrap{display:none;}
+  .trust-bar{grid-template-columns:repeat(2,1fr);}
+  .detail-inner,.detail-inner.rev{grid-template-columns:1fr;direction:ltr;}
+  .timeline{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- ANNOUNCE BAR -->
+<div class="announce" style="display:flex;align-items:center;justify-content:center;gap:.75rem;flex-wrap:wrap;">
+  <span><strong>ПРЕДЗАКАЗ ОТКРЫТ</strong> &nbsp;·&nbsp; Доставка по РФ и СНГ &nbsp;·&nbsp; Производство под заказ &nbsp;·&nbsp; Оплата в 3 этапа от <strong>$350</strong></span>
+  <div style="display:flex;gap:.5rem;align-items:center;flex-shrink:0;">
+    <a href="https://find-and-update.company-information.service.gov.uk/company/13176100" target="_blank" class="online-pill" style="background:rgba(34,197,94,0.8);">✓ Verified UK Ltd →</a>
+
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">Solar<span>Miner</span><span style="display:block;font-family:'Golos Text',sans-serif;font-size:.5rem;font-weight:400;color:var(--muted);letter-spacing:0;margin-top:1px;">by Green Sun Solar Ltd</span></div>
+  <div class="nav-links">
+    <a href="#products">Устройства</a>
+    <a href="#bundles">Пакеты</a>
+    <a href="#compare">Сравнение</a>
+    <a href="#preorder">Предзаказ</a>
+    <a href="#online">Онлайн</a>
+  </div>
+  <div class="nav-right">
+    <button class="nav-btn nav-btn-sun" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">Заказать SolarMiner →</button>
+    <button class="nav-btn" onclick="window.open('https://sunsolar.pro','_blank')">Личный кабинет</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+  <div class="hero-inner">
+    <div>
+      <div class="hero-eyebrow">Майнинг на солнечных панелях нового поколения</div>
+      <h1 class="hero-h1">Солнечная панель<br>приносит <span class="c-sun">доход</span><br><span class="c-sky">каждый день</span></h1>
+      <p class="hero-sub">Майнинг на солнечных панелях нового поколения. ИИ автоматически переключает потоки на самый прибыльный алгоритм. В южных регионах окупается за 3.5 месяца.</p>
+      <div class="hero-stats">
+        <div class="hs-item"><div class="v">$0</div><div class="l">на электричество</div></div>
+        <div class="hs-item"><div class="v">3.5 мес.</div><div class="l">в южных регионах</div></div>
+        <div class="hs-item"><div class="v">25 лет</div><div class="l">гарантия панели</div></div>
+      </div>
+      <div class="hero-btns">
+        <button class="btn-sun" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">Выбрать устройство →</button>
+        <button class="btn-outline-w" onclick="document.getElementById('online').scrollIntoView({behavior:'smooth'})">Заработать онлайн</button>
+      </div>
+    </div>
+    <div class="hero-img-wrap">
+      <div class="panel-anim-wrap">
+        <svg class="panel-svg" viewBox="0 0 320 300" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="sunGlow" cx="50%" cy="20%" r="60%">
+              <stop offset="0%" stop-color="#F59E0B" stop-opacity="0.25"/>
+              <stop offset="100%" stop-color="#F59E0B" stop-opacity="0"/>
+            </radialGradient>
+            <linearGradient id="panelGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#1E3A6A"/>
+              <stop offset="100%" stop-color="#0C1A2E"/>
+            </linearGradient>
+            <linearGradient id="cellGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#0EA5E9" stop-opacity="0.15"/>
+              <stop offset="100%" stop-color="#0EA5E9" stop-opacity="0.04"/>
+            </linearGradient>
+          </defs>
+          <!-- Sun glow background -->
+          <ellipse cx="160" cy="40" rx="140" ry="80" fill="url(#sunGlow)"/>
+          <!-- Sun -->
+          <circle cx="160" cy="38" r="22" fill="#F59E0B" opacity="0.9"/>
+          <circle cx="160" cy="38" r="28" fill="none" stroke="#F59E0B" stroke-width="1.5" opacity="0.4"/>
+          <circle cx="160" cy="38" r="36" fill="none" stroke="#F59E0B" stroke-width="1" opacity="0.2"/>
+          <!-- Sun rays -->
+          <g stroke="#F59E0B" stroke-width="2" opacity="0.5">
+            <line x1="160" y1="4" x2="160" y2="0"/>
+            <line x1="185" y1="13" x2="188" y2="10"/>
+            <line x1="196" y1="38" x2="200" y2="38"/>
+            <line x1="185" y1="63" x2="188" y2="66"/>
+            <line x1="135" y1="13" x2="132" y2="10"/>
+            <line x1="124" y1="38" x2="120" y2="38"/>
+            <line x1="135" y1="63" x2="132" y2="66"/>
+          </g>
+          <!-- Panel frame -->
+          <rect x="40" y="90" width="240" height="160" rx="6" fill="#334155" stroke="#475569" stroke-width="1.5"/>
+          <!-- Panel surface -->
+          <rect x="46" y="96" width="228" height="148" rx="4" fill="url(#panelGrad)"/>
+          <!-- Grid cells 3x4 -->
+          <g fill="url(#cellGrad)" stroke="#0EA5E9" stroke-opacity="0.2" stroke-width="0.5">
+            <rect x="52" y="102" width="68" height="43" rx="2"/>
+            <rect x="126" y="102" width="68" height="43" rx="2"/>
+            <rect x="200" y="102" width="68" height="43" rx="2"/>
+            <rect x="52" y="151" width="68" height="43" rx="2"/>
+            <rect x="126" y="151" width="68" height="43" rx="2"/>
+            <rect x="200" y="151" width="68" height="43" rx="2"/>
+            <rect x="52" y="200" width="68" height="38" rx="2"/>
+            <rect x="126" y="200" width="68" height="38" rx="2"/>
+            <rect x="200" y="200" width="68" height="38" rx="2"/>
+          </g>
+          <!-- Cell shine lines -->
+          <g stroke="#0EA5E9" stroke-opacity="0.12" stroke-width="0.5">
+            <line x1="52" y1="123" x2="120" y2="123"/>
+            <line x1="52" y1="133" x2="120" y2="133"/>
+            <line x1="126" y1="123" x2="194" y2="123"/>
+            <line x1="126" y1="133" x2="194" y2="133"/>
+            <line x1="200" y1="123" x2="268" y2="123"/>
+            <line x1="200" y1="133" x2="268" y2="133"/>
+          </g>
+          <!-- Smart controller box -->
+          <rect x="118" y="255" width="84" height="28" rx="5" fill="#1E3A6A" stroke="#334155" stroke-width="1"/>
+          <circle cx="134" cy="269" r="4" fill="#22C55E" opacity="0.9"/>
+          <circle cx="134" cy="269" r="6" fill="none" stroke="#22C55E" stroke-width="1" opacity="0.4"/>
+          <rect x="144" y="264" width="48" height="4" rx="2" fill="#334155"/>
+          <rect x="144" y="271" width="32" height="4" rx="2" fill="#334155"/>
+          <!-- Legs/mount -->
+          <line x1="90" y1="250" x2="70" y2="285" stroke="#475569" stroke-width="3" stroke-linecap="round"/>
+          <line x1="230" y1="250" x2="250" y2="285" stroke="#475569" stroke-width="3" stroke-linecap="round"/>
+          <line x1="60" y1="285" x2="260" y2="285" stroke="#475569" stroke-width="2.5" stroke-linecap="round"/>
+          <!-- Animated dollar signs floating up -->
+          <text class="dollar d1" x="80" y="100" font-size="18" font-weight="700" fill="#22C55E" opacity="0" text-anchor="middle">$</text>
+          <text class="dollar d2" x="160" y="95" font-size="22" font-weight="700" fill="#F59E0B" opacity="0" text-anchor="middle">$</text>
+          <text class="dollar d3" x="240" y="100" font-size="16" font-weight="700" fill="#22C55E" opacity="0" text-anchor="middle">$</text>
+          <text class="dollar d4" x="115" y="88" font-size="14" font-weight="700" fill="#0EA5E9" opacity="0" text-anchor="middle">$</text>
+          <text class="dollar d5" x="205" y="85" font-size="20" font-weight="700" fill="#22C55E" opacity="0" text-anchor="middle">$</text>
+
+        </svg>
+        <style>
+          .panel-anim-wrap{position:relative;}
+          .panel-svg{width:100%;max-width:380px;filter:drop-shadow(0 20px 60px rgba(14,165,233,0.2));}
+          .dollar{animation:floatUp 3s ease-in-out infinite;}
+          .d1{animation-delay:0s;}
+          .d2{animation-delay:0.6s;}
+          .d3{animation-delay:1.2s;}
+          .d4{animation-delay:1.8s;}
+          .d5{animation-delay:2.4s;}
+          @keyframes floatUp{
+            0%{opacity:0;transform:translateY(0);}
+            20%{opacity:1;}
+            80%{opacity:0.8;}
+            100%{opacity:0;transform:translateY(-55px);}
+          }
+        </style>
+      </div>
+      <div class="hero-badge" id="activity-ticker">
+        <div class="hb-dot"></div>
+        <div><div class="hb-t" id="ticker-text">Андрей присоединился к SolarFleet Online</div><div class="hb-s" id="ticker-time">только что</div></div>
+      </div>
+      <script>
+      (function(){
+        var msgs=[
+          "Андрей купил SolarMiner ULTRA","Магомед открыл пакет Реактор $1 000",
+          "Елена присоединилась к SolarFleet Online","Рустам получил выплату $147 USDT",
+          "Айгуль купила SolarMiner PRO","Ибрагим открыл пакет Термоядро $5 000",
+          "Зара вложила $500 в пакет Нейтрон","Алишер купил 5 панелей ULTRA",
+          "Фатима получила выплату $312 USDT","Тимур открыл пакет Фотон $50",
+          "Дмитрий купил SolarMiner PRO","Аслан присоединился к SolarFleet Online",
+          "Марина получила выплату $89 USDT","Умар открыл пакет Плазма $10 000",
+          "Светлана купила SolarMiner ULTRA","Руслан вложил $2 000 в Реактор",
+          "Камила получила выплату $203 USDT","Артём купил 3 панели ULTRA",
+          "Хадижат открыла пакет Нейтрон $500","Сергей присоединился к SolarFleet",
+          "Залина получила выплату $441 USDT","Азамат купил SolarMiner PRO",
+          "Ольга открыла пакет Фотон $200","Муса вложил $3 000 в Реактор",
+          "Кристина получила выплату $67 USDT","Шамиль купил 10 панелей ULTRA",
+          "Наталья открыла пакет Нейтрон $700","Беслан присоединился к SolarFleet",
+          "Алина получила выплату $528 USDT","Заур купил SolarMiner ULTRA",
+          "Виктория открыла пакет Реактор $1 500","Аминат вложила $8 000 в Термоядро",
+          "Максим получил выплату $174 USDT","Тахир купил SolarMiner PRO",
+          "Людмила открыла пакет Фотон $100","Расул присоединился к SolarFleet",
+          "Диана получила выплату $356 USDT","Мурад купил 5 панелей PRO",
+          "Екатерина открыла пакет Нейтрон $600","Арсен вложил $4 500 в Реактор",
+          "Алексей купил SolarMiner ULTRA","Патимат получила выплату $92 USDT",
+          "Николай открыл пакет Плазма $15 000","Лейла присоединилась к SolarFleet",
+          "Юлия получила выплату $261 USDT","Башир купил 3 панели ULTRA",
+          "Татьяна открыла пакет Фотон $300","Саид вложил $1 200 в Реактор",
+          "Антон купил SolarMiner PRO","Зулейха получила выплату $187 USDT",
+          "Ирина открыла пакет Нейтрон $800","Хасан присоединился к SolarFleet",
+          "Анастасия получила выплату $413 USDT","Ахмед купил SolarMiner ULTRA",
+          "Валерия открыла пакет Реактор $2 000","Сулейман вложил $6 000 в Термоядро",
+          "Денис получил выплату $138 USDT","Зарина купила 5 панелей ULTRA",
+          "Полина открыла пакет Фотон $150","Тельман присоединился к SolarFleet",
+          "Анна получила выплату $297 USDT","Гаджи купил SolarMiner PRO",
+          "Михаил открыл пакет Нейтрон $550","Саида вложила $9 000 в Термоядро",
+          "Дарья получила выплату $74 USDT","Омар купил 2 панели ULTRA",
+          "Елена открыла пакет Реактор $1 800","Асхаб присоединился к SolarFleet",
+          "Владимир получил выплату $492 USDT","Малика купила SolarMiner ULTRA",
+          "Ксения открыла пакет Фотон $400","Ильяс вложил $3 500 в Реактор",
+          "Павел купил SolarMiner PRO","Хава получила выплату $221 USDT",
+          "Евгения открыла пакет Нейтрон $650","Абдулла присоединился к SolarFleet",
+          "Вера получила выплату $345 USDT","Нурмагомед купил 10 панелей PRO",
+          "Наталья открыла пакет Термоядро $7 000","Ариф вложил $500 в Нейтрон",
+          "Роман купил SolarMiner ULTRA","Индира получила выплату $118 USDT",
+          "Алина открыла пакет Реактор $4 000","Эльдар присоединился к SolarFleet",
+          "Людмила получила выплату $387 USDT","Айдар купил SolarMiner PRO",
+          "Оксана открыла пакет Фотон $250","Марьям вложила $2 500 в Реактор",
+          "Игорь купил 3 панели ULTRA","Умайра получила выплату $156 USDT",
+          "Вика открыла пакет Нейтрон $900","Тагир присоединился к SolarFleet",
+          "Мария получила выплату $463 USDT","Камал купил SolarMiner ULTRA",
+          "Надежда открыла пакет Плазма $12 000","Джамал вложил $1 700 в Реактор",
+          "Борис купил SolarMiner PRO","Аида получила выплату $83 USDT",
+          "Анжела открыла пакет Фотон $50","Ахмат присоединился к SolarFleet"
+        ];
+        var times=["только что","1 минуту назад","2 минуты назад","3 минуты назад","только что","только что","1 минуту назад","только что"];
+        var el=document.getElementById("ticker-text");
+        var et=document.getElementById("ticker-time");
+        if(!el) return;
+        el.style.transition="opacity 0.35s";
+        et.style.transition="opacity 0.35s";
+        function next(){
+          var i=Math.floor(Math.random()*msgs.length);
+          var t=Math.floor(Math.random()*times.length);
+          el.style.opacity=0; et.style.opacity=0;
+          setTimeout(function(){
+            el.textContent=msgs[i];
+            et.textContent=times[t];
+            el.style.opacity=1; et.style.opacity=1;
+          },350);
+          setTimeout(next, 5000+Math.random()*5000);
+        }
+        setTimeout(next, 4000);
+      })();
+      </script>
+    </div>
+  </div>
+</div>
+
+<!-- TRUST BAR -->
+<div class="trust-bar">
+  <div class="tb-item"><div class="tb-icon">☀️</div><div class="tb-t">300+ солнечных дней</div><div class="tb-s">В году в Африке</div></div>
+  <div class="tb-item"><div class="tb-icon">⚡</div><div class="tb-t">Несколько потоков дохода</div><div class="tb-s">Диверсификация по монетам</div></div>
+  <div class="tb-item"><div class="tb-icon">🔧</div><div class="tb-t">КПД 25% · AIKO</div><div class="tb-s">Лучшие панели рынка</div></div>
+  <div class="tb-item"><div class="tb-icon">📦</div><div class="tb-t">Производство 6 мес.</div><div class="tb-s">Доставка по РФ</div></div>
+  <div class="tb-item"><div class="tb-icon">💎</div><div class="tb-t">Физическое владение</div><div class="tb-s">Ваш актив навсегда</div></div>
+  <div class="tb-item"><div class="tb-icon">🚚</div><div class="tb-t">Доставка РФ и СНГ</div><div class="tb-s">Под ключ</div></div>
+</div>
+
+<!-- PRODUCTS -->
+<section id="products">
+  <div class="sec-wrap">
+    <div class="sec-eyebrow">Линейка устройств</div>
+    <div class="sec-title">Выберите свой SolarMiner</div>
+    <p class="sec-sub">Физические устройства с доставкой. Работают от солнца — электричество бесплатно.</p>
+
+    <div class="products-grid">
+
+      <!-- ULTRA -->
+      <div class="prod-card hero-card">
+        <div class="card-img-wrap" style="position:relative;background:none;">
+          <img class="card-img" src="images/image1.png" alt="SolarMiner ULTRA" onerror="this.parentElement.style.minHeight='200px'">
+          <div class="card-img-badge">Хит продаж</div>
+        </div>
+        <div class="card-body">
+          <div class="card-tag">SolarMiner</div>
+          <div class="card-name">ULTRA</div>
+          <div class="card-desc">1 панель AIKO 500 Вт · Потоки I + II + IV · Smart Controller · Батарея LiFePO4 · Telegram-алерты</div>
+          <div class="card-roi">
+            <div class="roi-icon">🎯</div>
+            <div><div class="roi-t">Окупаемость ~4 месяца</div><div class="roi-s">в южных регионах · 280+ солнечных дней</div></div>
+          </div>
+          <div class="streams">
+            <div class="stream-row"><span class="sr-l">Blake3 · Поток I (100 Вт)</span><span class="sr-v sv-g">$3/день</span></div>
+            <div class="stream-row"><span class="sr-l">KHeavyHash · Поток IV (100 Вт)</span><span class="sr-v sv-s">$3/день</span></div>
+            <div class="stream-row"><span class="sr-l">GPU · Akash аренда</span><span class="sr-v sv-g">$4/день</span></div>
+            <div class="stream-row"><span class="sr-l">BTC Соло · Поток II</span><span class="sr-v sv-sun">Джекпот: весь блок BTC</span></div>
+          </div>
+          <div class="card-divider"></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem;">
+            <span style="font-size:.72rem;color:var(--muted);">Доход в КБР:</span>
+            <span style="font-family:'Unbounded',sans-serif;font-weight:700;color:var(--green);">~$300/мес</span>
+          </div>
+          <div class="card-price-row">
+            <div class="card-price">$1 170</div>
+            <div class="card-price-note">полный комплект</div>
+          </div>
+          <div class="pkg-label">Пакеты со скидкой:</div>
+          <div class="pkg-btns">
+            <button class="pkg-btn active" onclick="setPkg(this,'ultra',1,1170,0)">1 шт.</button>
+            <button class="pkg-btn" onclick="setPkg(this,'ultra',3,3159,7)">3 шт. <span class="pkg-discount">−7%</span></button>
+            <button class="pkg-btn" onclick="setPkg(this,'ultra',5,4973,15)">5 шт. <span class="pkg-discount">−15%</span></button>
+            <button class="pkg-btn" onclick="setPkg(this,'ultra',10,9360,20)">10 шт. <span class="pkg-discount">−20%</span></button>
+          </div>
+          <div style="font-size:.72rem;color:var(--muted);margin-bottom:1rem;" id="ultra-price-note">Итого: $1 170 · оплата в 3 этапа от $351</div>
+          <button class="card-cta cta-sun" onclick="openModal('SolarMiner ULTRA',1170,'ultra')">Заказать ULTRA →</button>
+        </div>
+      </div>
+
+      <!-- PRO -->
+      <div class="prod-card hero-card">
+        <div class="card-ribbon" style="background:#0EA5E9;">🏆 БЫСТРЕЕ ВСЕГО ОКУПАЕТСЯ</div>
+        <div class="card-img-wrap" style="background:#f1f5f9;">
+          <img class="card-img" src="images/image2.png" alt="SolarMiner PRO" onerror="this.parentElement.style.minHeight='200px'">
+          <div class="card-img-badge" style="background:rgba(14,165,233,0.15);border-color:rgba(14,165,233,0.3);color:var(--sky);">Максимум</div>
+        </div>
+        <div class="card-body">
+          <div class="card-tag">SolarMiner</div>
+          <div class="card-name">PRO</div>
+          <div class="card-desc">3 панели AIKO 500 Вт · Все 4 потока · Smart Controller × 3 · Полная конфигурация</div>
+          <div class="card-roi" style="background:rgba(14,165,233,0.05);border-color:rgba(14,165,233,0.15);">
+            <div class="roi-icon">🚀</div>
+            <div><div class="roi-t" style="color:var(--sky);">Окупаемость ~3.5 месяца</div><div class="roi-s">максимальный доход</div></div>
+          </div>
+          <div class="streams">
+            <div class="stream-row"><span class="sr-l">Blake3 × 3 · Поток I</span><span class="sr-v sv-g">$15/день</span></div>
+            <div class="stream-row"><span class="sr-l">EtHash × 3 · Поток III</span><span class="sr-v sv-sun">$12/день</span></div>
+            <div class="stream-row"><span class="sr-l">KHeavyHash × 3 · Поток IV</span><span class="sr-v sv-s">$9/день</span></div>
+            <div class="stream-row"><span class="sr-l">BTC Соло × 3 · Поток II</span><span class="sr-v sv-sun">×3 Джекпота</span></div>
+          </div>
+          <div class="card-divider"></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem;">
+            <span style="font-size:.72rem;color:var(--muted);">Доход в КБР:</span>
+            <span style="font-family:'Unbounded',sans-serif;font-weight:700;color:var(--sky);">~$1 080/мес</span>
+          </div>
+          <div class="card-price-row">
+            <div class="card-price">$3 800</div>
+            <div class="card-price-note">3 панели · под ключ</div>
+          </div>
+          <div class="pkg-label">Пакеты со скидкой:</div>
+          <div class="pkg-btns">
+            <button class="pkg-btn active" onclick="setPkg(this,'pro',1,3800,0)">1 шт.</button>
+            <button class="pkg-btn" onclick="setPkg(this,'pro',3,10260,10)">3 шт. <span class="pkg-discount">−10%</span></button>
+            <button class="pkg-btn" onclick="setPkg(this,'pro',5,16150,15)">5 шт. <span class="pkg-discount">−15%</span></button>
+          </div>
+          <div style="font-size:.72rem;color:var(--muted);margin-bottom:1rem;" id="pro-price-note">Итого: $3 800 · оплата в 3 этапа от $1 140</div>
+          <button class="card-cta cta-navy" onclick="openModal('SolarMiner PRO',3800,'pro')">Заказать PRO →</button>
+        </div>
+      </div>
+
+      <!-- ONLINE -->
+      <div class="prod-card online-card" id="online-card">
+        <div class="card-img-wrap" style="background:linear-gradient(135deg,#0C1A2E,#0F2240);text-align:center;padding:2.5rem 2rem;">
+          <div style="font-size:4rem;margin-bottom:.5rem;">🌍</div>
+          <div style="font-family:'Unbounded',sans-serif;font-weight:900;font-size:1.2rem;color:#fff;margin-bottom:.35rem;">SolarFleet</div>
+          <div style="font-size:.75rem;color:rgba(255,255,255,0.4);">Африка · Онлайн-участие</div>
+        </div>
+        <div class="card-body">
+          <div class="card-tag" style="color:var(--sky);">Без доставки и ожидания</div>
+          <div class="card-name" style="color:var(--sky);">Online</div>
+          <div class="card-desc">Купи долю в реальной ферме в Африке. Ежедневные начисления USDT. Не нужно ждать производства — доход с первой недели.</div>
+          <div class="card-roi" style="background:rgba(14,165,233,0.05);border-color:rgba(14,165,233,0.2);">
+            <div class="roi-icon">⚡</div>
+            <div><div class="roi-t" style="color:var(--sky);">Доход с первой недели</div><div class="roi-s">не нужно ждать 6 месяцев</div></div>
+          </div>
+          <div class="streams">
+            <div class="stream-row"><span class="sr-l">IP-камера + дашборд 24/7</span><span class="sr-v sv-g">онлайн</span></div>
+            <div class="stream-row"><span class="sr-l">Начисления ежедневно</span><span class="sr-v sv-s">USDT</span></div>
+            <div class="stream-row"><span class="sr-l">Сумма возвращается</span><span class="sr-v sv-g">после цикла</span></div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:1rem;">
+            <div style="background:#f8fafc;border:1px solid var(--border);border-radius:8px;padding:.6rem .8rem;">
+              <div style="font-family:'Unbounded',sans-serif;font-size:.55rem;font-weight:700;color:var(--navy);">Фотон</div>
+              <div style="font-size:.6rem;color:var(--muted);">$50–499</div>
+              <div style="font-family:'Unbounded',sans-serif;font-size:.9rem;font-weight:700;color:var(--sky);">5%</div>
+              <div style="font-size:.55rem;color:var(--muted);">за 15 дней</div>
+            </div>
+            <div style="background:#f8fafc;border:1px solid var(--border);border-radius:8px;padding:.6rem .8rem;">
+              <div style="font-family:'Unbounded',sans-serif;font-size:.55rem;font-weight:700;color:var(--navy);">Нейтрон</div>
+              <div style="font-size:.6rem;color:var(--muted);">$500–999</div>
+              <div style="font-family:'Unbounded',sans-serif;font-size:.9rem;font-weight:700;color:var(--sky);">12%</div>
+              <div style="font-size:.55rem;color:var(--muted);">за 30 дней</div>
+            </div>
+            <div style="background:rgba(14,165,233,0.06);border:1.5px solid rgba(14,165,233,0.25);border-radius:8px;padding:.6rem .8rem;position:relative;">
+              <div style="font-family:'Unbounded',sans-serif;font-size:.55rem;font-weight:700;color:var(--sky);">Реактор ⭐</div>
+              <div style="font-size:.6rem;color:var(--muted);">$1 000–4 999</div>
+              <div style="font-family:'Unbounded',sans-serif;font-size:.9rem;font-weight:700;color:var(--sky);">13%</div>
+              <div style="font-size:.55rem;color:var(--muted);">за 30 дней</div>
+            </div>
+            <div style="background:#f8fafc;border:1px solid var(--border);border-radius:8px;padding:.6rem .8rem;">
+              <div style="font-family:'Unbounded',sans-serif;font-size:.55rem;font-weight:700;color:var(--navy);">Термоядро</div>
+              <div style="font-size:.6rem;color:var(--muted);">$5 000–9 999</div>
+              <div style="font-family:'Unbounded',sans-serif;font-size:.9rem;font-weight:700;color:var(--sun);">16.66%</div>
+              <div style="font-size:.55rem;color:var(--muted);">за 90 дней</div>
+            </div>
+            <div style="background:#f8fafc;border:1px solid var(--border);border-radius:8px;padding:.6rem .8rem;">
+              <div style="font-family:'Unbounded',sans-serif;font-size:.55rem;font-weight:700;color:var(--navy);">Плазма</div>
+              <div style="font-size:.6rem;color:var(--muted);">$10 000–49 999</div>
+              <div style="font-family:'Unbounded',sans-serif;font-size:.9rem;font-weight:700;color:var(--sun);">18%</div>
+              <div style="font-size:.55rem;color:var(--muted);">за 90 дней</div>
+            </div>
+            <div style="background:linear-gradient(135deg,rgba(245,158,11,0.08),rgba(14,165,233,0.05));border:1px solid rgba(245,158,11,0.3);border-radius:8px;padding:.6rem .8rem;">
+              <div style="font-family:'Unbounded',sans-serif;font-size:.55rem;font-weight:700;color:var(--sun);">Квазар</div>
+              <div style="font-size:.6rem;color:var(--muted);">от $50 000</div>
+              <div style="font-family:'Unbounded',sans-serif;font-size:.9rem;font-weight:700;color:var(--sun);">~240%</div>
+              <div style="font-size:.55rem;color:var(--muted);">за 365 дней · 20%/мес</div>
+            </div>
+          </div>
+          <div class="card-divider"></div>
+          <div class="card-price-row">
+            <div class="card-price" style="color:var(--sky);">от $50</div>
+            <div class="card-price-note">вход · пакеты от $50 до $50 000+</div>
+          </div>
+          <button class="card-cta" style="background:var(--sky);color:#fff;" onclick="document.getElementById('online').scrollIntoView({behavior:'smooth'})">Участвовать онлайн →</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- DETAIL: ULTRA -->
+<section class="detail-section" style="padding:4rem 2rem;background:#fff;">
+  <div class="detail-inner" style="max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;">
+    <div class="detail-img-wrap">
+      <img class="detail-img" src="images/image3.png" alt="SolarMiner ULTRA detail" onerror="this.style.display='none'">
+    </div>
+    <div class="detail-content">
+      <div class="detail-eyebrow">SolarMiner ULTRA · Флагман</div>
+      <div class="detail-title">Три потока дохода.<br><span class="c-sun">Один актив.</span><br>$0 на свет.</div>
+      <div class="detail-body">Панель AIKO NEOSTAR 3P54 нового поколения — КПД 25%, гарантия 30 лет. На задней раме три майнера: Blake3, KHeavyHash и BTC соло. Smart Controller на ESP32-S3 с MPPT-зарядкой и LTE — всё видно в телефоне. Батарея LiFePO4 1 кВт·ч держит работу 5 часов после захода солнца.</div>
+      <div class="detail-metrics">
+        <div class="dm-box"><div class="dm-val" style="color:var(--sun);">~$10/день</div><div class="dm-lbl">Доход в южных регионах</div></div>
+        <div class="dm-box"><div class="dm-val" style="color:var(--green);">4 мес.</div><div class="dm-lbl">Окупаемость</div></div>
+        <div class="dm-box"><div class="dm-val" style="color:var(--sky);">500 Вт</div><div class="dm-lbl">Панель AIKO</div></div>
+        <div class="dm-box"><div class="dm-val" style="color:var(--navy);">$0</div><div class="dm-lbl">Электричество</div></div>
+      </div>
+      <div class="feature-list">
+        <div class="feat"><div class="feat-dot dot-sun"></div>Blake3 майнер 100 Вт — $3/день</div>
+        <div class="feat"><div class="feat-dot dot-sun"></div>KHeavyHash 100 Вт — $3/день</div>
+        <div class="feat"><div class="feat-dot dot-sun"></div>GPU Akash аренда — $4/день</div>
+        <div class="feat"><div class="feat-dot dot-sky"></div>BTC соло: шанс найти целый блок Bitcoin (~$300 000) — приз не делится ни с кем</div>
+        <div class="feat"><div class="feat-dot dot-green"></div>Батарея LiFePO4 1 кВт·ч — работа ночью</div>
+        <div class="feat"><div class="feat-dot dot-green"></div>Smart Controller · Telegram-алерты 24/7</div>
+        <div class="feat"><div class="feat-dot dot-sky"></div><strong>ИИ-управление:</strong> автоматически переключает поток на самый прибыльный алгоритм</div>
+      </div>
+      <button class="btn-sun" onclick="openModal('SolarMiner ULTRA',1170,'ultra')">Заказать ULTRA — $1 170 →</button>
+    </div>
+  </div>
+</section>
+
+<!-- DETAIL: PRO -->
+<section class="detail-section" style="padding:4rem 2rem;background:var(--bg);">
+  <div style="max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;">
+    <div class="detail-content">
+      <div class="detail-eyebrow">SolarMiner PRO · Максимальная конфигурация</div>
+      <div class="detail-title">Три панели.<br>Четыре потока.<br><span class="c-sky">$1 080 в месяц.</span></div>
+      <div class="detail-body">3 панели AIKO по 500 Вт. Полный набор потоков включая EtHash 240 Вт — самый доходный алгоритм. Три независимых Smart Controller. Максимальная диверсификация по монетам — при падении одной остальные продолжают работать.</div>
+      <div class="detail-metrics">
+        <div class="dm-box"><div class="dm-val" style="color:var(--sky);">~$36/день</div><div class="dm-lbl">Доход в южных регионах</div></div>
+        <div class="dm-box"><div class="dm-val" style="color:var(--green);">3.5 мес.</div><div class="dm-lbl">Окупаемость</div></div>
+        <div class="dm-box"><div class="dm-val" style="color:var(--sky);">1500 Вт</div><div class="dm-lbl">3 панели AIKO</div></div>
+        <div class="dm-box"><div class="dm-val" style="color:var(--navy);">×3</div><div class="dm-lbl">BTC джекпота</div></div>
+      </div>
+      <div class="feature-list">
+        <div class="feat"><div class="feat-dot dot-sun"></div>Blake3 × 3 — $15/день</div>
+        <div class="feat"><div class="feat-dot dot-sun"></div>EtHash 240 Вт × 3 — $12/день</div>
+        <div class="feat"><div class="feat-dot dot-sky"></div>KHeavyHash × 3 — $9/день</div>
+        <div class="feat"><div class="feat-dot dot-sky"></div>BTC соло × 3 — тройной шанс найти блок и получить ~$300 000 целиком</div>
+        <div class="feat"><div class="feat-dot dot-green"></div>Три независимых Smart Controller</div>
+      </div>
+      <button class="nav-btn" style="padding:.9rem 2rem;font-size:.9rem;border-radius:10px;font-weight:700;" onclick="openModal('SolarMiner PRO',3800,'pro')">Заказать PRO — $3 800 →</button>
+    </div>
+    <div class="detail-img-wrap">
+      <img class="detail-img" src="images/image4.png" alt="SolarMiner PRO detail" onerror="this.style.display='none'">
+    </div>
+  </div>
+</section>
+
+<!-- KBR BLOCK -->
+<section style="padding:4rem 2rem;background:#fff;">
+  <div class="sec-wrap">
+    <div class="kbr-block">
+      <div style="position:relative;z-index:2;">
+        <div class="kbr-eyebrow">КБР · Дагестан · Краснодар · Ташкент · Баку</div>
+        <div class="kbr-title">В южных регионах панель<br>окупается за <span class="c-sun">3.5 месяца.</span><br>Потом — чистая прибыль.</div>
+        <div class="kbr-body">КБР, Дагестан, Краснодар, Ставрополь, Ростов-на-Дону, Ташкент, Баку, Алматы — 260–300+ солнечных дней в году. Это на 35–50% больше чем в Москве. Больше солнца = больше энергии = выше доход. Пока сосед платит $100–150/мес за электричество — ваши расходы ноль.</div>
+        <div class="kbr-stats">
+          <div class="kbr-stat"><div class="v">280+</div><div class="l">Солнечных дней в году</div></div>
+          <div class="kbr-stat"><div class="v">$0</div><div class="l">На электричество</div></div>
+          <div class="kbr-stat"><div class="v">3.5 мес.</div><div class="l">Окупаемость ULTRA</div></div>
+          <div class="kbr-stat"><div class="v">25 лет</div><div class="l">Гарантия панели AIKO</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BUNDLES -->
+<section id="bundles" style="background:var(--bg);border-top:1px solid var(--border);">
+  <div class="sec-wrap">
+    <div class="sec-eyebrow">Оптовые пакеты</div>
+    <div class="sec-title">Берите больше — платите меньше</div>
+    <p class="sec-sub">Для перепродажи, семьи или масштабирования. Скидка фиксируется при заказе.</p>
+    <div class="bundles-grid">
+      <div class="bundle-card">
+        <div class="bundle-qty">1</div>
+        <div class="bundle-unit">устройство ULTRA</div>
+        <div class="bundle-price">$1 170</div>
+        <div class="bundle-save">&nbsp;</div>
+        <button class="bundle-cta" onclick="openModal('SolarMiner ULTRA × 1',1170,'ultra')">Заказать</button>
+      </div>
+      <div class="bundle-card">
+        <div class="bundle-qty">3</div>
+        <div class="bundle-unit">устройства ULTRA</div>
+        <div class="bundle-price">$3 159</div>
+        <div class="bundle-save">Экономия $351 (−7%)</div>
+        <button class="bundle-cta" onclick="openModal('SolarMiner ULTRA × 3',3159,'ultra')">Заказать</button>
+      </div>
+      <div class="bundle-card popular">
+        <div class="bundle-popular-badge">ТОП ВЫБОР</div>
+        <div class="bundle-qty">5</div>
+        <div class="bundle-unit">устройств ULTRA</div>
+        <div class="bundle-price">$4 973</div>
+        <div class="bundle-save">Экономия $877 (−15%)</div>
+        <button class="bundle-cta sun" onclick="openModal('SolarMiner ULTRA × 5',4973,'ultra')">Заказать</button>
+      </div>
+      <div class="bundle-card">
+        <div class="bundle-qty">10</div>
+        <div class="bundle-unit">устройств ULTRA</div>
+        <div class="bundle-price">$9 360</div>
+        <div class="bundle-save">Экономия $2 340 (−20%)</div>
+        <button class="bundle-cta" onclick="openModal('SolarMiner ULTRA × 10',9360,'ultra')">Заказать</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARISON TABLE -->
+<section id="compare" style="background:#fff;border-top:1px solid var(--border);">
+  <div class="sec-wrap">
+    <div class="sec-eyebrow">Сравнение</div>
+    <div class="sec-title">Все три продукта</div>
+    <p class="sec-sub" style="margin-bottom:2rem;">Выберите формат участия.</p>
+    <div class="compare-wrap">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>Параметр</th>
+            <th class="center">SolarFleet Online</th>
+            <th class="center" style="background:#1a3050;">SolarMiner ULTRA <span class="col-badge">ХИIT</span></th>
+            <th class="center">SolarMiner PRO</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="row-head"><td colspan="4">Условия входа</td></tr>
+          <tr>
+            <td>Минимальный вход</td>
+            <td class="center">$50</td>
+            <td class="center highlight-col"><strong>$1 170</strong></td>
+            <td class="center">$3 800</td>
+          </tr>
+          <tr>
+            <td>Старт получения дохода</td>
+            <td class="center td-sky"><strong>1 неделя</strong></td>
+            <td class="center highlight-col">6 месяцев (доставка)</td>
+            <td class="center">6 месяцев (доставка)</td>
+          </tr>
+          <tr>
+            <td>Оплата в этапах</td>
+            <td class="center">Нет</td>
+            <td class="center highlight-col"><span class="chk">✓</span> 30/30/40%</td>
+            <td class="center"><span class="chk">✓</span> 30/30/40%</td>
+          </tr>
+          <tr class="row-head"><td colspan="4">Доход</td></tr>
+          <tr>
+            <td>Доход в день</td>
+            <td class="center">$0.40/ячейка</td>
+            <td class="center highlight-col"><strong style="color:var(--sun);">~$10/день</strong></td>
+            <td class="center">~$36/день</td>
+          </tr>
+          <tr>
+            <td>Доход в месяц</td>
+            <td class="center">$12–$612</td>
+            <td class="center highlight-col"><strong style="color:var(--sun);">~$300/мес</strong></td>
+            <td class="center">~$1 080/мес</td>
+          </tr>
+          <tr>
+            <td>Окупаемость</td>
+            <td class="center">5% / 15 дн. → 20% / 365 дн.</td>
+            <td class="center highlight-col"><strong style="color:var(--sun);">~4 месяца</strong></td>
+            <td class="center"><strong style="color:var(--green);">~3.5 месяца</strong></td>
+          </tr>
+          <tr class="row-head"><td colspan="4">Потоки дохода</td></tr>
+          <tr>
+            <td>Blake3 · Поток I</td>
+            <td class="center" style="color:var(--green);font-size:.75rem;font-weight:600;">все потоки</td>
+            <td class="center highlight-col"><span class="chk">✓</span></td>
+            <td class="center"><span class="chk">✓</span></td>
+          </tr>
+          <tr>
+            <td>BTC Соло · Поток II</td>
+            <td class="center"><span class="chk">✓</span></td>
+            <td class="center highlight-col"><span class="chk">✓</span></td>
+            <td class="center"><span class="chk">✓</span></td>
+          </tr>
+          <tr>
+            <td>EtHash · Поток III</td>
+            <td class="center"><span class="chk">✓</span></td>
+            <td class="center highlight-col"><span class="cross">—</span></td>
+            <td class="center"><span class="chk">✓</span></td>
+          </tr>
+          <tr>
+            <td>KHeavyHash · Поток IV</td>
+            <td class="center"><span class="chk">✓</span></td>
+            <td class="center highlight-col"><span class="chk">✓</span></td>
+            <td class="center"><span class="chk">✓</span></td>
+          </tr>
+          <tr class="row-head"><td colspan="4">Владение и контроль</td></tr>
+          <tr>
+            <td>Физическое владение</td>
+            <td class="center"><span class="cross">—</span></td>
+            <td class="center highlight-col"><span class="chk">✓</span></td>
+            <td class="center"><span class="chk">✓</span></td>
+          </tr>
+          <tr>
+            <td>IP-камера 24/7</td>
+            <td class="center"><span class="chk">✓</span></td>
+            <td class="center highlight-col"><span class="chk">✓</span></td>
+            <td class="center"><span class="chk">✓</span></td>
+          </tr>
+          <tr>
+            <td>Smart Controller + Telegram</td>
+            <td class="center"><span class="cross">—</span></td>
+            <td class="center highlight-col"><span class="chk">✓</span></td>
+            <td class="center"><span class="chk">✓</span></td>
+          </tr>
+          <tr>
+            <td>Гарантия панели</td>
+            <td class="center">—</td>
+            <td class="center highlight-col">30 лет AIKO</td>
+            <td class="center">30 лет AIKO</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- PREORDER TIMELINE -->
+<section id="preorder" style="background:var(--bg);border-top:1px solid var(--border);">
+  <div class="sec-wrap">
+    <div class="sec-eyebrow">Производственный цикл</div>
+    <div class="sec-title">6 месяцев — не ожидание.<br>Это производство вашего актива.</div>
+    <p class="sec-sub">Пока панель производится — ваш онлайн-участок уже работает и приносит доход.</p>
+    <div class="timeline">
+      <div class="tl-phase">
+        <div class="tl-step">Шаг 1 · Месяц 1</div>
+        <div class="tl-pct">30%</div>
+        <div class="tl-title">Бронирование места</div>
+        <div class="tl-desc">Оплата $350 — место в производственной очереди закреплено. Договор подписан.</div>
+        <div class="tl-bonus"><strong>Бонус:</strong> Онлайн-ячейка SolarFleet подключается бесплатно. Первые выплаты уже через неделю.</div>
+      </div>
+      <div class="tl-phase">
+        <div class="tl-step">Шаг 2 · Месяц 4–5</div>
+        <div class="tl-pct">30%</div>
+        <div class="tl-title">Панель готова</div>
+        <div class="tl-desc">Фото и видео вашей конкретной панели. Серийный номер. Второй платёж $350.</div>
+        <div class="tl-bonus"><strong>За это время:</strong> онлайн-ячейка уже принесла вам ~$150–200 в USDT.</div>
+      </div>
+      <div class="tl-phase">
+        <div class="tl-step">Шаг 3 · Месяц 6</div>
+        <div class="tl-pct">40%</div>
+        <div class="tl-title">Отгрузка и доставка</div>
+        <div class="tl-desc">Финальный платёж $470. Трек-номер. Доставка по РФ.</div>
+        <div class="tl-bonus"><strong>Итого ждали:</strong> 6 месяцев. <strong>Заработали за ожидание:</strong> ~$300–400 USDT.</div>
+      </div>
+    </div>
+
+    <!-- PREORDER FORM -->
+    <div id="preorder-form-wrap" style="margin-top:2.5rem;background:var(--white);border:1.5px solid var(--border);border-radius:20px;padding:2rem;max-width:560px;margin-left:auto;margin-right:auto;">
+      <div style="font-family:'Unbounded',sans-serif;font-weight:700;font-size:1rem;margin-bottom:.35rem;">Оставить заявку на предзаказ</div>
+      <div style="font-size:.78rem;color:var(--muted);margin-bottom:1.5rem;">Заполните форму — мы свяжемся в течение 24 часов и зафиксируем вашу цену</div>
+      <div id="pr-fields">
+        <div style="margin-bottom:.9rem;">
+          <label style="display:block;font-size:.72rem;font-weight:600;color:var(--muted);margin-bottom:.35rem;">Имя *</label>
+          <input id="pr-name" type="text" placeholder="Ваше имя" style="width:100%;border:1.5px solid var(--border);border-radius:9px;padding:.65rem .9rem;font-family:'Golos Text',sans-serif;font-size:.85rem;outline:none;transition:border-color .2s;" onfocus="this.style.borderColor='var(--sun)'" onblur="this.style.borderColor='var(--border)'"/>
+        </div>
+        <div style="margin-bottom:.9rem;">
+          <label style="display:block;font-size:.72rem;font-weight:600;color:var(--muted);margin-bottom:.35rem;">Email *</label>
+          <input id="pr-email" type="email" placeholder="example@mail.com" style="width:100%;border:1.5px solid var(--border);border-radius:9px;padding:.65rem .9rem;font-family:'Golos Text',sans-serif;font-size:.85rem;outline:none;transition:border-color .2s;" onfocus="this.style.borderColor='var(--sun)'" onblur="this.style.borderColor='var(--border)'"/>
+        </div>
+        <div style="margin-bottom:.9rem;">
+          <label style="display:block;font-size:.72rem;font-weight:600;color:var(--muted);margin-bottom:.35rem;">Телефон</label>
+          <input id="pr-phone" type="tel" placeholder="+7 (___) ___-__-__" style="width:100%;border:1.5px solid var(--border);border-radius:9px;padding:.65rem .9rem;font-family:'Golos Text',sans-serif;font-size:.85rem;outline:none;transition:border-color .2s;" onfocus="this.style.borderColor='var(--sun)'" onblur="this.style.borderColor='var(--border)'"/>
+        </div>
+        <div style="margin-bottom:.9rem;">
+          <label style="display:block;font-size:.72rem;font-weight:600;color:var(--muted);margin-bottom:.35rem;">Логин Telegram (необязательно)</label>
+          <input id="pr-telegram" type="text" placeholder="@username" style="width:100%;border:1.5px solid var(--border);border-radius:9px;padding:.65rem .9rem;font-family:'Golos Text',sans-serif;font-size:.85rem;outline:none;transition:border-color .2s;" onfocus="this.style.borderColor='var(--sun)'" onblur="this.style.borderColor='var(--border)'"/>
+        </div>
+        <div style="margin-bottom:.9rem;">
+          <label style="display:block;font-size:.72rem;font-weight:600;color:var(--muted);margin-bottom:.35rem;">Устройство</label>
+          <select id="pr-device" style="width:100%;border:1.5px solid var(--border);border-radius:9px;padding:.65rem .9rem;font-family:'Golos Text',sans-serif;font-size:.85rem;outline:none;background:#fff;transition:border-color .2s;" onfocus="this.style.borderColor='var(--sun)'" onblur="this.style.borderColor='var(--border)'">
+            <option value="">Выберите устройство</option>
+            <option>SolarMiner ULTRA — $1 170</option>
+            <option>SolarMiner PRO — $3 800</option>
+          </select>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:1.25rem;font-size:.72rem;color:var(--muted);">
+          <input type="checkbox" id="pr-agree" style="margin-top:2px;accent-color:var(--sun);"/>
+          <label for="pr-agree">Согласен с <a href="docs/policy.docx" target="_blank" style="color:var(--sky);">Политикой конфиденциальности</a> и <a href="docs/agreement.docx" target="_blank" style="color:var(--sky);">Пользовательским соглашением</a></label>
+        </div>
+        <button id="pr-btn" onclick="submitPreorder()" style="width:100%;background:var(--sun);color:var(--navy);border:none;border-radius:10px;padding:.85rem;font-family:'Golos Text',sans-serif;font-size:.9rem;font-weight:700;cursor:pointer;transition:all .2s;" onmouseover="this.style.background='#D97706'" onmouseout="this.style.background='var(--sun)'">Отправить заявку →</button>
+      </div>
+      <div id="pr-success" style="display:none;text-align:center;padding:1rem 0;">
+        <div style="font-size:2.5rem;margin-bottom:.75rem;">✅</div>
+        <div style="font-weight:700;font-size:1rem;margin-bottom:.4rem;">Заявка принята!</div>
+        <div style="font-size:.8rem;color:var(--muted);">Мы свяжемся с вами в течение 24 часов. Проверьте email.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VERIFY -->
+<section style="background:var(--bg);border-top:1px solid var(--border);">
+  <div class="sec-wrap">
+    <div class="sec-eyebrow">Прозрачность</div>
+    <div class="sec-title">Проверьте сами — прямо сейчас</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:2rem;">
+      <div style="background:var(--white);border:1.5px solid rgba(34,197,94,0.3);border-radius:12px;padding:1.25rem;display:flex;gap:12px;align-items:flex-start;background:rgba(34,197,94,0.02);">
+        <div style="font-size:1.25rem;flex-shrink:0;">🏢</div>
+        <div>
+          <div style="font-size:.82rem;font-weight:600;margin-bottom:.3rem;">Green Sun Solar Ltd</div>
+          <div style="font-size:.72rem;color:var(--muted);line-height:1.55;">Reg. No. 13176100 · Active с 2021 · England &amp; Wales<br>
+          <a href="https://find-and-update.company-information.service.gov.uk/company/13176100" target="_blank" style="color:var(--sky);font-weight:600;">Проверить в реестре Companies House →</a></div>
+        </div>
+      </div>
+      <div style="background:var(--white);border:1px solid var(--border);border-radius:12px;padding:1.25rem;display:flex;gap:12px;align-items:flex-start;">
+        <div style="font-size:1.25rem;flex-shrink:0;">📷</div>
+        <div>
+          <div style="font-size:.82rem;font-weight:600;margin-bottom:.3rem;">IP-камера 24/7</div>
+          <div style="font-size:.72rem;color:var(--muted);line-height:1.55;">Прямой эфир с объекта в реальном времени — доступен в личном кабинете</div>
+        </div>
+      </div>
+      <div style="background:var(--white);border:1px solid var(--border);border-radius:12px;padding:1.25rem;display:flex;gap:12px;align-items:flex-start;">
+        <div style="font-size:1.25rem;flex-shrink:0;">📊</div>
+        <div>
+          <div style="font-size:.82rem;font-weight:600;margin-bottom:.3rem;">Solar Assistant Dashboard</div>
+          <div style="font-size:.72rem;color:var(--muted);line-height:1.55;">Выработка, нагрузка, данные контроллера — публичный URL в реальном времени</div>
+        </div>
+      </div>
+      <div style="background:var(--white);border:1px solid var(--border);border-radius:12px;padding:1.25rem;display:flex;gap:12px;align-items:flex-start;">
+        <div style="font-size:1.25rem;flex-shrink:0;">🔗</div>
+        <div>
+          <div style="font-size:.82rem;font-weight:600;margin-bottom:.3rem;">Данные пула открыты</div>
+          <div style="font-size:.72rem;color:var(--muted);line-height:1.55;">Хэшрейт и выплаты на публичном адресе — проверяется любым пользователем</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ONLINE SECTION -->
+<section id="online" style="background:#fff;border-top:1px solid var(--border);">
+  <div class="sec-wrap">
+    <div class="sec-eyebrow">Не хотите ждать?</div>
+    <div class="sec-title">Заработайте онлайн — с первой недели</div>
+    <div class="online-section">
+      <div style="position:relative;z-index:2;">
+        <div class="os-eyebrow">// SOLARFLEET ONLINE · ФЕРМА В АФРИКЕ</div>
+        <div class="os-title">Участвуй в ферме <span>от $50</span><br>— доход начисляется каждый день</div>
+        <div class="os-desc">Не нужно ждать производство. Реальная солнечная ферма в Африке уже работает. Покупаете долю в панелях — получаете выплаты в USDT. Тело депозита возвращается после цикла. IP-камера и дашборд в личном кабинете.</div>
+        <div class="os-grid">
+          <div class="os-box"><div class="os-val">$50</div><div class="os-lbl">минимальный вход</div></div>
+          <div class="os-box"><div class="os-val">$12/мес</div><div class="os-lbl">с 1 ячейки</div></div>
+          <div class="os-box"><div class="os-val">~4 мес.</div><div class="os-lbl">окупаемость</div></div>
+          <div class="os-box"><div class="os-val">24/7</div><div class="os-lbl">IP-камера онлайн</div></div>
+        </div>
+        <div style="margin-bottom:1.75rem;">
+          <div style="font-family:'Unbounded',sans-serif;font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(14,165,233,0.5);margin-bottom:1rem;">Пакеты участия</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.75rem;">
+
+            <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:1.1rem;">
+              <div style="font-family:'Unbounded',sans-serif;font-size:.62rem;font-weight:700;color:rgba(255,255,255,0.7);margin-bottom:.35rem;">Фотон</div>
+              <div style="font-size:.65rem;color:rgba(255,255,255,0.3);margin-bottom:.6rem;">$50 — $499</div>
+              <div style="font-family:'Unbounded',sans-serif;font-size:1.2rem;font-weight:900;color:var(--sky);">5%</div>
+              <div style="font-size:.6rem;color:rgba(255,255,255,0.3);">за 365 дней · 20%/мес</div>
+            </div>
+
+            <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:1.1rem;">
+              <div style="font-family:'Unbounded',sans-serif;font-size:.62rem;font-weight:700;color:rgba(255,255,255,0.7);margin-bottom:.35rem;">Нейтрон</div>
+              <div style="font-size:.65rem;color:rgba(255,255,255,0.3);margin-bottom:.6rem;">$500 — $999</div>
+              <div style="font-family:'Unbounded',sans-serif;font-size:1.2rem;font-weight:900;color:var(--sky);">12%</div>
+              <div style="font-size:.6rem;color:rgba(255,255,255,0.3);">за 30 дней · Lock 30 дн.</div>
+            </div>
+
+            <div style="background:rgba(14,165,233,0.1);border:1.5px solid rgba(14,165,233,0.3);border-radius:12px;padding:1.1rem;position:relative;">
+              <div style="position:absolute;top:-9px;left:12px;background:var(--sky);color:#fff;font-family:'Unbounded',sans-serif;font-size:.44rem;font-weight:700;padding:2px 8px;border-radius:100px;">ПОПУЛЯРНЫЙ</div>
+              <div style="font-family:'Unbounded',sans-serif;font-size:.62rem;font-weight:700;color:#fff;margin-bottom:.35rem;">Реактор</div>
+              <div style="font-size:.65rem;color:rgba(255,255,255,0.4);margin-bottom:.6rem;">$1 000 — $4 999</div>
+              <div style="font-family:'Unbounded',sans-serif;font-size:1.2rem;font-weight:900;color:var(--sky);">13%</div>
+              <div style="font-size:.6rem;color:rgba(255,255,255,0.35);">за 30 дней · Lock 30 дн.</div>
+            </div>
+
+            <div style="background:rgba(245,158,11,0.07);border:1px solid rgba(245,158,11,0.2);border-radius:12px;padding:1.1rem;">
+              <div style="font-family:'Unbounded',sans-serif;font-size:.62rem;font-weight:700;color:rgba(255,255,255,0.7);margin-bottom:.35rem;">Термоядро</div>
+              <div style="font-size:.65rem;color:rgba(255,255,255,0.3);margin-bottom:.6rem;">$5 000 — $9 999</div>
+              <div style="font-family:'Unbounded',sans-serif;font-size:1.2rem;font-weight:900;color:var(--sun);">~50%</div>
+              <div style="font-size:.6rem;color:rgba(255,255,255,0.3);">за 90 дней · ~16.7%/мес</div>
+            </div>
+
+            <div style="background:rgba(245,158,11,0.07);border:1px solid rgba(245,158,11,0.25);border-radius:12px;padding:1.1rem;">
+              <div style="font-family:'Unbounded',sans-serif;font-size:.62rem;font-weight:700;color:rgba(255,255,255,0.7);margin-bottom:.35rem;">Плазма</div>
+              <div style="font-size:.65rem;color:rgba(255,255,255,0.3);margin-bottom:.6rem;">$10 000 — $49 999</div>
+              <div style="font-family:'Unbounded',sans-serif;font-size:1.2rem;font-weight:900;color:var(--sun);">~55%</div>
+              <div style="font-size:.6rem;color:rgba(255,255,255,0.3);">за 90 дней · ~18%/мес</div>
+            </div>
+
+            <div style="background:linear-gradient(135deg,rgba(245,158,11,0.12),rgba(14,165,233,0.08));border:1px solid rgba(245,158,11,0.3);border-radius:12px;padding:1.1rem;">
+              <div style="font-family:'Unbounded',sans-serif;font-size:.62rem;font-weight:700;color:var(--sun);margin-bottom:.35rem;">Квазар</div>
+              <div style="font-size:.65rem;color:rgba(255,255,255,0.3);margin-bottom:.6rem;">от $50 000</div>
+              <div style="font-family:'Unbounded',sans-serif;font-size:1.2rem;font-weight:900;color:var(--sun);">~240%</div>
+              <div style="font-size:.6rem;color:rgba(255,255,255,0.3);">за цикл · 365 дней</div>
+            </div>
+
+          </div>
+          <div style="margin-top:.85rem;font-size:.65rem;color:rgba(255,255,255,0.22);line-height:1.7;border-top:1px solid rgba(255,255,255,0.05);padding-top:.75rem;">
+            До 3 пакетов одновременно для диверсификации · Доход начисляется каждый день · По окончании цикла вся сумма возвращается на ваш баланс · Вывод средств — мгновенно, крупные суммы до 48 часов
+          </div>
+        </div>
+        <button class="os-btn" onclick="window.open('https://sunsolar.pro','_blank')">Открыть личный кабинет →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<div class="cta-final">
+  <h2>Солнце светит <span>бесплатно.</span><br>Начните зарабатывать сегодня.</h2>
+  <p>Предзаказ открыт · Место в очереди от $350 · Онлайн-участие от $50</p>
+  <div style="display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;">
+    <button class="btn-sun" style="font-size:.95rem;" onclick="openModal()">Заказать SolarMiner →</button>
+    <button class="btn-outline-w" style="color:var(--navy);border-color:var(--border);" onclick="document.getElementById('online').scrollIntoView({behavior:'smooth'})">Участвовать онлайн</button>
+  </div>
+</div>
+
+<footer>
+  <!-- Documents block -->
+  <div style="max-width:900px;margin:0 auto 1.5rem;display:flex;flex-wrap:wrap;gap:1.5rem;justify-content:center;font-weight:700;font-size:.85rem;">
+    <a href="docs/green-sun-solar-inc.pdf" target="_blank" style="color:rgba(255,255,255,0.8);text-decoration:none;">Green Sun Solar Inc</a>
+    <a href="https://docs.google.com/viewer?url=https://sunsolar.pro/docs/agreement.docx" target="_blank" style="color:rgba(255,255,255,0.8);text-decoration:none;">Пользовательское соглашение</a>
+    <a href="https://docs.google.com/viewer?url=https://sunsolar.pro/docs/policy.docx" target="_blank" style="color:rgba(255,255,255,0.8);text-decoration:none;">Политика конфиденциальности</a>
+    <a href="https://docs.google.com/viewer?url=https://sunsolar.pro/docs/contract.docx" target="_blank" style="color:rgba(255,255,255,0.8);text-decoration:none;">Договор аренды вычислительной мощности</a>
+  </div>
+  © 2025 SolarMiner<br>
+  Официальное юридическое лицо: <strong style="color:rgba(255,255,255,0.5);">Green Sun Solar Ltd</strong> · Reg. No. <a href="https://find-and-update.company-information.service.gov.uk/company/13176100" target="_blank" style="color:rgba(255,255,255,0.4);">13176100</a> · Registered in England & Wales<br>
+  Договор аренды вычислительной мощности · Физическое оборудование поставляется по договору купли-продажи<br>
+  <a href="mailto:support@sunsolar.pro">support@sunsolar.pro</a>
+</footer>
+
+<!-- ORDER MODAL -->
+<div id="modal-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9000;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(6px);" onclick="if(event.target===this)closeModal()">
+  <div style="background:#fff;border-radius:20px;padding:2rem;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;position:relative;">
+    <button onclick="closeModal()" style="position:absolute;top:14px;right:14px;background:#f1f5f9;border:none;border-radius:8px;width:30px;height:30px;font-size:16px;cursor:pointer;color:#64748B;">×</button>
+    <div style="font-family:'Unbounded',sans-serif;font-weight:700;font-size:1.05rem;margin-bottom:.3rem;" id="modal-title">Оформить заказ</div>
+    <div style="font-size:.75rem;color:#64748B;margin-bottom:1.25rem;" id="modal-subtitle"></div>
+
+    <!-- Order summary -->
+    <div id="modal-summary" style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:1rem 1.1rem;margin-bottom:1.25rem;font-size:.8rem;">
+      <div style="display:flex;justify-content:space-between;margin-bottom:.5rem;"><span style="color:#64748B;">Устройство</span><span id="ms-device" style="font-weight:700;">—</span></div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:.5rem;"><span style="color:#64748B;">Сумма</span><span id="ms-price" style="font-weight:700;color:#F59E0B;">—</span></div>
+      <div style="display:flex;justify-content:space-between;padding-top:.5rem;border-top:1px solid #e2e8f0;"><span style="color:#64748B;">Первый платёж (30%)</span><span id="ms-first" style="font-weight:700;color:#0EA5E9;">—</span></div>
+    </div>
+
+    <!-- Fields -->
+    <div id="modal-fields">
+      <div style="margin-bottom:.8rem;">
+        <label style="display:block;font-size:.7rem;font-weight:600;color:#64748B;margin-bottom:.3rem;">Имя *</label>
+        <input id="m-name" type="text" placeholder="Ваше имя" style="width:100%;border:1.5px solid #e2e8f0;border-radius:9px;padding:.6rem .85rem;font-family:'Golos Text',sans-serif;font-size:.85rem;outline:none;" onfocus="this.style.borderColor='#F59E0B'" onblur="this.style.borderColor='#e2e8f0'"/>
+      </div>
+      <div style="margin-bottom:.8rem;">
+        <label style="display:block;font-size:.7rem;font-weight:600;color:#64748B;margin-bottom:.3rem;">Email *</label>
+        <input id="m-email" type="email" placeholder="example@mail.com" style="width:100%;border:1.5px solid #e2e8f0;border-radius:9px;padding:.6rem .85rem;font-family:'Golos Text',sans-serif;font-size:.85rem;outline:none;" onfocus="this.style.borderColor='#F59E0B'" onblur="this.style.borderColor='#e2e8f0'"/>
+      </div>
+      <div style="margin-bottom:.8rem;">
+        <label style="display:block;font-size:.7rem;font-weight:600;color:#64748B;margin-bottom:.3rem;">Телефон</label>
+        <input id="m-phone" type="tel" placeholder="+7 (___) ___-__-__" style="width:100%;border:1.5px solid #e2e8f0;border-radius:9px;padding:.6rem .85rem;font-family:'Golos Text',sans-serif;font-size:.85rem;outline:none;" onfocus="this.style.borderColor='#F59E0B'" onblur="this.style.borderColor='#e2e8f0'"/>
+      </div>
+      <div style="margin-bottom:.8rem;">
+        <label style="display:block;font-size:.7rem;font-weight:600;color:#64748B;margin-bottom:.3rem;">Логин Telegram (необязательно)</label>
+        <input id="m-telegram" type="text" placeholder="@username" style="width:100%;border:1.5px solid #e2e8f0;border-radius:9px;padding:.6rem .85rem;font-family:'Golos Text',sans-serif;font-size:.85rem;outline:none;" onfocus="this.style.borderColor='#F59E0B'" onblur="this.style.borderColor='#e2e8f0'"/>
+      </div>
+      <div style="font-size:.7rem;font-weight:700;color:#64748B;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.6rem;">Способ оплаты</div>
+      <div style="margin-bottom:1rem;">
+        <div style="border:1.5px solid #F59E0B;border-radius:10px;padding:.75rem 1rem;background:rgba(245,158,11,0.05);display:flex;align-items:center;gap:10px;">
+          <div style="font-size:1.2rem;">💎</div>
+          <div>
+            <div style="font-size:.78rem;font-weight:700;">USDT (TRC-20 / ERC-20)</div>
+            <div style="font-size:.65rem;color:#64748B;">Оплата в криптовалюте через CryptoCloud</div>
+          </div>
+          <div style="margin-left:auto;width:16px;height:16px;border-radius:50%;background:#F59E0B;display:flex;align-items:center;justify-content:center;font-size:.55rem;color:#fff;font-weight:900;">✓</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:1.1rem;font-size:.7rem;color:#64748B;">
+        <input type="checkbox" id="m-agree" style="margin-top:2px;accent-color:#F59E0B;"/>
+        <label for="m-agree">Согласен с <a href="docs/contract.docx" target="_blank" style="color:#0EA5E9;">Договором аренды</a> и <a href="docs/policy.docx" target="_blank" style="color:#0EA5E9;">Политикой конфиденциальности</a></label>
+      </div>
+      <button id="modal-pay-btn" onclick="processPayment()" style="width:100%;background:#F59E0B;color:#0C1A2E;border:none;border-radius:10px;padding:.85rem;font-family:'Golos Text',sans-serif;font-size:.9rem;font-weight:700;cursor:pointer;transition:all .2s;" onmouseover="this.style.background='#D97706'" onmouseout="this.style.background='#F59E0B'">Перейти к оплате →</button>
+      <div style="font-size:.65rem;color:#94a3b8;text-align:center;margin-top:.6rem;">🔒 Платёж через CryptoCloud · Данные защищены</div>
+    </div>
+    <div id="modal-success" style="display:none;text-align:center;padding:1rem 0;">
+      <div style="font-size:3rem;margin-bottom:.75rem;">✅</div>
+      <div style="font-weight:700;font-size:1.1rem;margin-bottom:.4rem;">Заявка принята!</div>
+      <div style="font-size:.8rem;color:#64748B;">Мы свяжемся с вами в течение 24 часов.<br>Проверьте вашу почту.</div>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast" style="position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(80px);background:#22C55E;color:#fff;border-radius:12px;padding:12px 24px;font-weight:700;font-size:.85rem;z-index:9999;transition:transform .35s;box-shadow:0 8px 24px rgba(0,0,0,.25);white-space:nowrap;"></div>
+
+<script>
+// ── PACKAGE PRICE TRACKER ──
+const pkgPrices = { ultra: 1170, pro: 3800 };
+let currentDevice = '', currentPrice = 0, currentPayMethod = 'crypto';
+
+function setPkg(btn, prod, qty, total, discount) {
+  btn.closest(".pkg-btns").querySelectorAll(".pkg-btn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  const note = document.getElementById(prod + "-price-note");
+  const first = Math.round(total * 0.3);
+  const saved = discount > 0 ? " · экономия " + discount + "%" : "";
+  note.textContent = "Итого: $" + total.toLocaleString() + " (" + qty + " шт." + saved + ") · первый платёж $" + first.toLocaleString();
+  // update tracked price for modal
+  pkgPrices[prod] = total;
+}
+
+// ── ORDER MODAL ──
+function openModal(device, price, prod) {
+  device = device || 'SolarMiner ULTRA';
+  price = price || pkgPrices[prod] || 1170;
+  currentDevice = device;
+  currentPrice = price;
+
+  document.getElementById('modal-title').textContent = 'Оформить заказ';
+  document.getElementById('modal-subtitle').textContent = device;
+  document.getElementById('ms-device').textContent = device;
+  document.getElementById('ms-price').textContent = '$' + price.toLocaleString();
+  document.getElementById('ms-first').textContent = '$' + Math.round(price * 0.3).toLocaleString();
+  document.getElementById('modal-fields').style.display = 'block';
+  document.getElementById('modal-success').style.display = 'none';
+  document.getElementById('modal-summary').style.display = 'block';
+
+  const ov = document.getElementById('modal-overlay');
+  ov.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+function selectPay(method) { currentPayMethod = method; }
+
+async function processPayment() {
+  const name = document.getElementById('m-name').value.trim();
+  const email = document.getElementById('m-email').value.trim();
+  const phone = document.getElementById('m-phone').value.trim();
+  const agree = document.getElementById('m-agree').checked;
+
+  if (!name || !email) { showToast('Заполните имя и email', 'error'); return; }
+  if (!agree) { showToast('Примите условия соглашения', 'error'); return; }
+
+  const btn = document.getElementById('modal-pay-btn');
+  btn.textContent = 'Создаём счёт...';
+  btn.disabled = true;
+
+  try {
+    const res = await fetch('/api/create-payment', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        amount: currentPrice,
+        email: email,
+        name: name,
+        device: currentDevice,
+        telegram: document.getElementById('m-telegram').value.trim()
+      })
+    });
+
+    const data = await res.json();
+
+    if (data.pay_url) {
+      window.open(data.pay_url, '_blank');
+      document.getElementById('modal-fields').style.display = 'none';
+      document.getElementById('modal-summary').style.display = 'none';
+      document.getElementById('modal-success').style.display = 'block';
+      showToast('Счёт создан! Переходим к оплате...');
+      btn.textContent = 'Перейти к оплате →';
+      btn.disabled = false;
+    } else {
+      throw new Error(data.error || 'Ошибка создания счёта');
+    }
+  } catch(e) {
+    showToast('Ошибка: ' + e.message, 'error');
+    btn.textContent = 'Перейти к оплате →';
+    btn.disabled = false;
+  }
+}
+
+// ── PREORDER FORM ──
+async function submitPreorder() {
+  const name = document.getElementById('pr-name').value.trim();
+  const email = document.getElementById('pr-email').value.trim();
+  const agree = document.getElementById('pr-agree').checked;
+  const btn = document.getElementById('pr-btn');
+
+  if (!name || !email) { showToast('Заполните имя и email', 'error'); return; }
+  if (!agree) { showToast('Примите условия', 'error'); return; }
+
+  btn.textContent = 'Отправка...';
+  btn.disabled = true;
+
+  try {
+    await fetch('/api/send-email', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        name,
+        email,
+        phone: document.getElementById('pr-phone').value,
+        telegram: document.getElementById('pr-telegram').value.trim(),
+        device: document.getElementById('pr-device').value,
+        type: 'preorder'
+      })
+    });
+
+    document.getElementById('pr-fields').style.display = 'none';
+    document.getElementById('pr-success').style.display = 'block';
+    showToast('Заявка отправлена! Проверьте email.');
+    btn.textContent = 'Отправить заявку →';
+    btn.disabled = false;
+  } catch(e) {
+    showToast('Ошибка отправки. Попробуйте ещё раз.', 'error');
+    btn.textContent = 'Отправить заявку →';
+    btn.disabled = false;
+  }
+}
+
+// ── TOAST ──
+function showToast(msg, type) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.background = type === 'error' ? '#ef4444' : '#22C55E';
+  t.style.transform = 'translateX(-50%) translateY(0)';
+  setTimeout(() => { t.style.transform = 'translateX(-50%) translateY(80px)'; }, 3000);
+}
+</script>
+</body>
+</html>

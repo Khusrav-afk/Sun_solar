@@ -57,7 +57,7 @@ async function notifyManager({ name, email, device, amount }) {
     },
     body: JSON.stringify({
       from: 'SolarMiner <noreply@sunsolarminer.com>',
-      to: ['bhusrav59@gmail.com'],
+      to: ['bhusrav59@gmail.com', email],
       subject: `💰 Новый заказ от ${name} — $${amount}`,
       html: `
         <h2>Новый заказ на SolarMiner!</h2>

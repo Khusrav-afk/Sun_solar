@@ -223,6 +223,9 @@ td.center{text-align:center;}
 footer{background:var(--navy);color:rgba(255,255,255,0.3);padding:2rem;text-align:center;font-size:.72rem;line-height:1.8;}
 footer a{color:rgba(255,255,255,0.4);text-decoration:none;}
 
+/* ═══════════════════════════════════════════
+   MOBILE  — ИСПРАВЛЕНО: изображения крупнее
+   ═══════════════════════════════════════════ */
 @media(max-width:768px){
   .announce{font-size:.65rem;padding:.5rem 4rem .5rem .75rem;}
   .online-pill{font-size:.6rem;padding:.25rem .65rem;}
@@ -234,10 +237,16 @@ footer a{color:rgba(255,255,255,0.4);text-decoration:none;}
   .detail-inner,.detail-inner.rev{grid-template-columns:1fr;direction:ltr;}
   .timeline{grid-template-columns:1fr;}
   .products-grid{grid-template-columns:1fr;}
-  .card-img{height:280px;}
-  .card-img-wrap{padding:1rem;}
+
+  /* ↓ ИЗМЕНЕНО: было height:280px и padding:1rem */
+  .card-img{height:420px;object-fit:contain;}
+  .card-img-wrap{padding:.5rem;}
+
   .bundles-grid{grid-template-columns:1fr 1fr;}
-  .detail-img-wrap{padding:1rem;}
+
+  /* ↓ ИЗМЕНЕНО: было padding:1rem */
+  .detail-img-wrap{padding:.5rem;}
+  .detail-img{width:100%;height:auto;display:block;}
 }
 </style>
 </head>
@@ -305,13 +314,10 @@ footer a{color:rgba(255,255,255,0.4);text-decoration:none;}
               <stop offset="100%" stop-color="#0EA5E9" stop-opacity="0.04"/>
             </linearGradient>
           </defs>
-          <!-- Sun glow background -->
           <ellipse cx="160" cy="40" rx="140" ry="80" fill="url(#sunGlow)"/>
-          <!-- Sun -->
           <circle cx="160" cy="38" r="22" fill="#F59E0B" opacity="0.9"/>
           <circle cx="160" cy="38" r="28" fill="none" stroke="#F59E0B" stroke-width="1.5" opacity="0.4"/>
           <circle cx="160" cy="38" r="36" fill="none" stroke="#F59E0B" stroke-width="1" opacity="0.2"/>
-          <!-- Sun rays -->
           <g stroke="#F59E0B" stroke-width="2" opacity="0.5">
             <line x1="160" y1="4" x2="160" y2="0"/>
             <line x1="185" y1="13" x2="188" y2="10"/>
@@ -321,11 +327,8 @@ footer a{color:rgba(255,255,255,0.4);text-decoration:none;}
             <line x1="124" y1="38" x2="120" y2="38"/>
             <line x1="135" y1="63" x2="132" y2="66"/>
           </g>
-          <!-- Panel frame -->
           <rect x="40" y="90" width="240" height="160" rx="6" fill="#334155" stroke="#475569" stroke-width="1.5"/>
-          <!-- Panel surface -->
           <rect x="46" y="96" width="228" height="148" rx="4" fill="url(#panelGrad)"/>
-          <!-- Grid cells 3x4 -->
           <g fill="url(#cellGrad)" stroke="#0EA5E9" stroke-opacity="0.2" stroke-width="0.5">
             <rect x="52" y="102" width="68" height="43" rx="2"/>
             <rect x="126" y="102" width="68" height="43" rx="2"/>
@@ -337,7 +340,6 @@ footer a{color:rgba(255,255,255,0.4);text-decoration:none;}
             <rect x="126" y="200" width="68" height="38" rx="2"/>
             <rect x="200" y="200" width="68" height="38" rx="2"/>
           </g>
-          <!-- Cell shine lines -->
           <g stroke="#0EA5E9" stroke-opacity="0.12" stroke-width="0.5">
             <line x1="52" y1="123" x2="120" y2="123"/>
             <line x1="52" y1="133" x2="120" y2="133"/>
@@ -346,23 +348,19 @@ footer a{color:rgba(255,255,255,0.4);text-decoration:none;}
             <line x1="200" y1="123" x2="268" y2="123"/>
             <line x1="200" y1="133" x2="268" y2="133"/>
           </g>
-          <!-- Smart controller box -->
           <rect x="118" y="255" width="84" height="28" rx="5" fill="#1E3A6A" stroke="#334155" stroke-width="1"/>
           <circle cx="134" cy="269" r="4" fill="#22C55E" opacity="0.9"/>
           <circle cx="134" cy="269" r="6" fill="none" stroke="#22C55E" stroke-width="1" opacity="0.4"/>
           <rect x="144" y="264" width="48" height="4" rx="2" fill="#334155"/>
           <rect x="144" y="271" width="32" height="4" rx="2" fill="#334155"/>
-          <!-- Legs/mount -->
           <line x1="90" y1="250" x2="70" y2="285" stroke="#475569" stroke-width="3" stroke-linecap="round"/>
           <line x1="230" y1="250" x2="250" y2="285" stroke="#475569" stroke-width="3" stroke-linecap="round"/>
           <line x1="60" y1="285" x2="260" y2="285" stroke="#475569" stroke-width="2.5" stroke-linecap="round"/>
-          <!-- Animated dollar signs floating up -->
           <text class="dollar d1" x="80" y="100" font-size="18" font-weight="700" fill="#22C55E" opacity="0" text-anchor="middle">$</text>
           <text class="dollar d2" x="160" y="95" font-size="22" font-weight="700" fill="#F59E0B" opacity="0" text-anchor="middle">$</text>
           <text class="dollar d3" x="240" y="100" font-size="16" font-weight="700" fill="#22C55E" opacity="0" text-anchor="middle">$</text>
           <text class="dollar d4" x="115" y="88" font-size="14" font-weight="700" fill="#0EA5E9" opacity="0" text-anchor="middle">$</text>
           <text class="dollar d5" x="205" y="85" font-size="20" font-weight="700" fill="#22C55E" opacity="0" text-anchor="middle">$</text>
-
         </svg>
         <style>
           .panel-anim-wrap{position:relative;}
@@ -1076,14 +1074,12 @@ footer a{color:rgba(255,255,255,0.4);text-decoration:none;}
     <div style="font-family:'Unbounded',sans-serif;font-weight:700;font-size:1.05rem;margin-bottom:.3rem;" id="modal-title">Оформить заказ</div>
     <div style="font-size:.75rem;color:#64748B;margin-bottom:1.25rem;" id="modal-subtitle"></div>
 
-    <!-- Order summary -->
     <div id="modal-summary" style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:1rem 1.1rem;margin-bottom:1.25rem;font-size:.8rem;">
       <div style="display:flex;justify-content:space-between;margin-bottom:.5rem;"><span style="color:#64748B;">Устройство</span><span id="ms-device" style="font-weight:700;">—</span></div>
       <div style="display:flex;justify-content:space-between;margin-bottom:.5rem;"><span style="color:#64748B;">Сумма</span><span id="ms-price" style="font-weight:700;color:#F59E0B;">—</span></div>
       <div style="display:flex;justify-content:space-between;padding-top:.5rem;border-top:1px solid #e2e8f0;"><span style="color:#64748B;">Первый платёж (30%)</span><span id="ms-first" style="font-weight:700;color:#0EA5E9;">—</span></div>
     </div>
 
-    <!-- Fields -->
     <div id="modal-fields">
       <div style="margin-bottom:.8rem;">
         <label style="display:block;font-size:.7rem;font-weight:600;color:#64748B;margin-bottom:.3rem;">Имя *</label>
@@ -1131,7 +1127,6 @@ footer a{color:rgba(255,255,255,0.4);text-decoration:none;}
 <div id="toast" style="position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(80px);background:#22C55E;color:#fff;border-radius:12px;padding:12px 24px;font-weight:700;font-size:.85rem;z-index:9999;transition:transform .35s;box-shadow:0 8px 24px rgba(0,0,0,.25);white-space:nowrap;"></div>
 
 <script>
-// ── PACKAGE PRICE TRACKER ──
 const pkgPrices = { ultra: 1170, pro: 3800 };
 let currentDevice = '', currentPrice = 0, currentPayMethod = 'crypto';
 
@@ -1142,11 +1137,9 @@ function setPkg(btn, prod, qty, total, discount) {
   const first = Math.round(total * 0.3);
   const saved = discount > 0 ? " · экономия " + discount + "%" : "";
   note.textContent = "Итого: $" + total.toLocaleString() + " (" + qty + " шт." + saved + ") · первый платёж $" + first.toLocaleString();
-  // update tracked price for modal
   pkgPrices[prod] = total;
 }
 
-// ── ORDER MODAL ──
 function openModal(device, price, prod) {
   device = device || 'SolarMiner ULTRA';
   price = price || pkgPrices[prod] || 1170;
@@ -1170,7 +1163,6 @@ function openModal(device, price, prod) {
 function closeModal() {
   document.getElementById('modal-overlay').style.display = 'none';
   document.body.style.overflow = '';
-  // Сброс состояния модала
   document.getElementById('modal-fields').style.display = 'block';
   document.getElementById('modal-summary').style.display = 'block';
   document.getElementById('modal-success').style.display = 'none';
@@ -1227,7 +1219,6 @@ async function processPayment() {
   }
 }
 
-// ── PREORDER FORM ──
 async function submitPreorder() {
   const name = document.getElementById('pr-name').value.trim();
   const email = document.getElementById('pr-email').value.trim();
@@ -1266,7 +1257,6 @@ async function submitPreorder() {
   }
 }
 
-// ── TOAST ──
 function showToast(msg, type) {
   const t = document.getElementById('toast');
   t.textContent = msg;

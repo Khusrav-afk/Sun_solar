@@ -247,6 +247,11 @@ footer a{color:rgba(255,255,255,0.4);text-decoration:none;}
   /* ↓ ИЗМЕНЕНО: было padding:1rem */
   .detail-img-wrap{padding:.5rem;}
   .detail-img{width:100%;height:auto;display:block;}
+
+  /* ↓ ИСПРАВЛЕНИЕ: инлайн стили перебивали медиа-запрос — используем !important */
+  .detail-inner,.detail-section > div{grid-template-columns:1fr!important;direction:ltr!important;gap:1.5rem!important;}
+  .detail-img-wrap{padding:.5rem!important;width:100%!important;}
+  .detail-img{width:100%!important;height:auto!important;display:block!important;}
 }
 </style>
 </head>
